@@ -14,7 +14,7 @@ const cat = id => byId(CATS, id) || {};
 const city = id => byId(CITIES, id) || {};
 const co = id => byId(COMPANIES, id) || {};
 const title = it => it[S.lang] || it.en;
-const desc = it => it['d' + S.lang] || it.den;
+const desc = it => (S.lang === 'ur' ? it.d_ur : it['d' + S.lang]) || it.den;
 const LANGS = ['ar','en','ur'];
 const langBtns = () => LANGS.map(l => `<button data-act="setlang" data-l="${l}" class="${S.lang===l?'on':''}" lang="${l}">${I18N[l].lang_name}${S.lang===l?ic('check','sm'):''}</button>`).join('');
 const ago = d => d === 0 ? t('today') : t('ago_d').replace('{n}', d);
