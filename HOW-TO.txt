@@ -1,0 +1,31 @@
+UT BOT — UI Prototype (frontend only)
+=====================================
+
+HOW TO OPEN
+  Double-click index.html (Chrome, Safari or Edge). No server, no install.
+  Internet is only used for the Cairo font; without it the page falls back to the system font.
+
+WHAT IS IN IT
+  - 3 languages from the globe menu in the header: Arabic (default, RTL), English, Urdu (RTL).
+    The choice is remembered. Urdu texts live in assets/js/data-ur.js.
+  - Pages: Home, Equipment, Materials, each category, For Rent / For Sale, search,
+    listing details, Projects + project details, Companies + company profile,
+    Services, Favorites, Log in / Register (demo), My account (demo).
+  - Post an Ad: 5 steps (type > details > photos > location > preview > done)
+    for Sell equipment, Rent equipment, Materials, Request a project, Offer a service.
+    "Fill sample data" and "Add sample photos" buttons make live demos quick.
+  - Contact seller, show number, WhatsApp, favorites, share, report, submit offer:
+    all show the real UI flow but send/save nothing.
+  - Nothing is stored or published. Refreshing the page resets everything.
+
+ADDING REAL PHOTOS (optional)
+  Listings currently use built-in illustrations. To show real photos, drop JPGs into
+  assets/img/listings/ named by listing id, e.g.:
+     l1.jpg  (main photo of listing l1)   l1-2.jpg  l1-3.jpg  l1-4.jpg  (gallery)
+  Listing ids are in assets/js/data.js (l1-l16 equipment, m1-m8 materials).
+  Hero photos: assets/img/hero-1.jpg and hero-2.jpg.
+
+EDITING CONTENT
+  assets/js/data.js  -> texts (AR/EN), categories, listings, companies, projects, services
+  assets/css/style.css -> colors at the top (:root), layout, responsive rules
+  assets/js/app.js   -> pages and interactions
