@@ -570,6 +570,13 @@ html[lang=ur] body{line-height:1.75}
 html[lang=ur] .hero h1{line-height:1.4;font-weight:700}
 html[lang=ur] .card h3{min-height:52px}
 
+/* Optional real photos layered over the illustrations */
+.ct-art,.mat-art,.serv-art,.proj-hero,.co-cover-art,.m-art,.my-ad-art{position:relative}
+.ct-art>.ph,.mat-art>.ph,.serv-art>.ph,.proj-hero>.ph,.co-cover-art>.ph,.m-art>.ph,.my-ad-art>.ph{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.ct-art{border-radius:10px;overflow:hidden}
+.proj-hero .tag{z-index:2}
+.gal-main{border-radius:12px}
+
 /* ---------------- Responsive ---------------- */
 @media (max-width:1200px){
   .brand-txt{display:none}

@@ -21,6 +21,7 @@ const ago = d => d === 0 ? t('today') : t('ago_d').replace('{n}', d);
 const artOf = it => it.art || cat(it.cat).art;
 const vOf = id => (parseInt(String(id).replace(/\D/g,''),10) || 0) % 4;
 const priceHTML = (p, unit) => `<span class="price">${fmt(p)} <small>${t('cur')}${unit && unit !== 'total' ? ' ' + t('u_' + unit) : ''}</small></span>`;
+const pic = (dir, name) => `<img class="ph" src="assets/img/${dir}/${name}.jpg" alt="" loading="lazy" onload="this.classList.add('ok')" onerror="this.remove()">`;
 const photo = (id, suf='') => `<img class="ph" src="assets/img/listings/${id}${suf}.jpg" alt="" loading="lazy" onload="this.classList.add('ok')" onerror="this.remove()">`;
 
 const P = {
@@ -188,7 +189,7 @@ function card(it){
       <div class="cfoot">${priceHTML(it.price, it.unit)}<span class="ago">${ago(it.days)}</span></div></div></a>`;
 }
 const secHead = (h, link, linkTxt) => `<div class="sec-h"><h2>${h}</h2>${link?`<a href="${link}" class="more">${linkTxt||t('view_all')} ${ic('chev','flip')}</a>`:''}</div>`;
-const catTile = c => `<a class="cat-tile" href="#/c/${c.id}"><div class="ct-art">${ART(c.art,0,true)}</div><span>${L(c)}</span></a>`;
+const catTile = c => `<a class="cat-tile" href="#/c/${c.id}"><div class="ct-art">${ART(c.art,0,true)}${pic('categories', c.id)}</div><span>${L(c)}</span></a>`;
 const stars = r => `<span class="stars">${ic('star')} ${r.toFixed(1)}</span>`;
 function coCard(c){
   return `<a class="co-card" href="#/co/${c.id}"><div class="co-logo" style="--c:${c.color}">${c.ab}</div><div class="co-info"><h3>${esc(L(c))} <span class="vf" title="${t('verified')}">${ic('shield')}</span></h3>
@@ -202,7 +203,7 @@ function projCard(p){
 }
 function servCard(s){
   const c = co(s.seller);
-  return `<div class="serv"><div class="serv-art">${ART(s.art, vOf(s.id))}</div><div class="serv-b"><span class="tag">${t(s.type)}</span><h3>${esc(L(s))}</h3><p class="muted clamp2">${esc(desc(s))}</p>
+  return `<div class="serv"><div class="serv-art">${ART(s.art, vOf(s.id))}${pic('services', s.id)}</div><div class="serv-b"><span class="tag">${t(s.type)}</span><h3>${esc(L(s))}</h3><p class="muted clamp2">${esc(desc(s))}</p>
     <div class="serv-f"><div><small>${t('from')}</small>${priceHTML(s.price, s.unit)}</div><button class="btn btn-sm btn-y" data-act="contact" data-seller="${s.seller}" data-svc="${s.id}">${t('request_service')}</button></div>
     <a class="serv-prov" href="#/co/${c.id}">${t('provider')}: ${esc(L(c))}</a></div></div>`;
 }
@@ -255,7 +256,7 @@ function vHome(){
   <section class="wrap sec">${secHead(t('featured'), '#/featured')}<div class="grid">${featured.map(card).join('')}</div></section>
 
   <section class="wrap sec">${secHead(t('sec_mat'), '#/materials')}
-    <div class="mat-grid">${matCats.map(c => `<a class="mat" href="#/c/${c.id}"><div class="mat-art">${ART(c.art, 0)}</div><div class="mat-b"><b>${L(c)}</b><small>${t('from')} ${fmt(minP(c.id))} ${t('cur')} ${t('u_'+unitOf(c.id))}</small></div></a>`).join('')}</div></section>
+    <div class="mat-grid">${matCats.map(c => `<a class="mat" href="#/c/${c.id}"><div class="mat-art">${ART(c.art, 0)}${pic('categories', c.id)}</div><div class="mat-b"><b>${L(c)}</b><small>${t('from')} ${fmt(minP(c.id))} ${t('cur')} ${t('u_'+unitOf(c.id))}</small></div></a>`).join('')}</div></section>
 
   <section class="wrap"><div class="promo"><div class="promo-txt"><h2>${t('promo_t')}</h2><p>${t('promo_p')}</p><a class="btn btn-y btn-lg" href="#/post?type=rent">${ic('plus')} ${t('promo_btn')}</a></div><div class="promo-art">${ART('crane',0,true)}</div></div></section>
 
@@ -365,9 +366,9 @@ function vListing(id){
   return `<div class="wrap detail-wrap">${crumbs([[t(c.g), '#/'+c.g],[L(c), '#/c/'+c.id],[title(it)]])}
   <div class="detail">
     <div class="d-main">
-      <div class="gal"><div class="gal-main" id="galMain">${galMain(it, v)}
+      <div class="gal"><div class="gal-main" id="galMain">${ART(artOf(it), vOf(id))}${photo(it.id)}
         <div class="badges">${it.featured?`<span class="b b-y">${t('featured_b')}</span>`:''}${it.isNew?`<span class="b b-g">${t('new_b')}</span>`:''}<span class="b b-k">${t(it.deal)}</span></div></div>
-        <div class="gal-thumbs">${[0,1,2,3].map(x => `<button class="th${x===v?' on':''}" data-act="gal" data-v="${x}" aria-label="photo ${x+1}">${ART(artOf(it), x)}${photo(it.id, x ? '-' + (x+1) : '')}</button>`).join('')}</div></div>
+        </div>
       <div class="box"><h2>${t('specs')}</h2><dl class="specs">${rows.map(r => `<div><dt>${r[0]}</dt><dd>${esc(r[1])}</dd></div>`).join('')}</dl></div>
       <div class="box"><h2>${t('description')}</h2><p class="desc">${esc(desc(it))}</p></div>
       <div class="box"><h2>${t('location')}</h2><div class="loc-row"><div>${miniMap(it.city)}</div><p>${ic('pin')} <b>${L(city(it.city))}</b> — ${esc(L(it.area))}</p></div></div>
@@ -401,7 +402,7 @@ function vCompanies(){
 function vCompany(id){
   const c = co(id); if (!c.id) return vNF();
   const items = LISTINGS.filter(l => l.seller === id);
-  return `<section class="co-cover"><div class="co-cover-art">${ART('company', vOf(id))}</div><div class="wrap co-head">
+  return `<section class="co-cover"><div class="co-cover-art">${ART('company', vOf(id))}${pic('companies', id)}</div><div class="wrap co-head">
     <div class="co-logo xl" style="--c:${c.color}">${c.ab}</div><div class="co-h-txt"><h1>${esc(L(c))} <span class="vf">${ic('shield')}</span></h1>
     <p>${t('type_'+c.type)} · ${ic('pin')} ${L(city(c.city))} · ${t('member_since')} ${c.since}</p><div class="co-meta">${stars(c.rating)}<span>${c.n} ${t('listings_n')}</span></div></div>
     <div class="co-h-acts"><button class="btn btn-y" data-act="contact" data-seller="${id}">${ic('chat')} ${t('contact_company')}</button><button class="btn btn-line" data-act="share">${ic('share')} ${t('share')}</button></div></div></section>
@@ -417,7 +418,7 @@ function vProject(id){
   const o = co(p.owner);
   return `<div class="wrap detail-wrap">${crumbs([[t('projects'),'#/projects'],[L(p)]])}
   <div class="detail"><div class="d-main">
-    <div class="proj-hero">${ART(p.type==='pt_marine'?'marine':p.type==='pt_road'?'road':p.type==='pt_supply'?'mixer':'excavator', vOf(id))}<span class="tag">${t(p.type)}</span></div>
+    <div class="proj-hero">${ART(p.type==='pt_marine'?'marine':p.type==='pt_road'?'road':p.type==='pt_supply'?'mixer':'excavator', vOf(id))}${pic('projects', id)}<span class="tag">${t(p.type)}</span></div>
     <div class="box"><h1 class="h1-sm">${esc(L(p))}</h1><p class="desc">${esc(desc(p))}</p></div>
     <div class="box"><h2>${t('req_eq')}</h2><div class="eq-chips">${p.eq.map(e => `<a class="eq-chip" href="#/c/${e}"><span>${ART(cat(e).art,0,true)}</span>${L(cat(e))}</a>`).join('')}</div></div>
     <div class="box"><h2>${t('location')}</h2><div class="loc-row"><div>${miniMap(p.city)}</div><p>${ic('pin')} <b>${L(city(p.city))}</b></p></div></div>
@@ -451,7 +452,7 @@ function vAccount(tab){
   let body;
   if (tab === 'favs') body = favGrid();
   else if (tab === 'msgs') body = `<div class="msg-list">${msgs.map((m,i) => { const c = co(m[0]); return `<button class="msg${i===0?' unread':''}" data-act="demo"><div class="co-logo" style="--c:${c.color}">${c.ab}</div><div><b>${esc(L(c))}</b><p>${esc(L(m[1]))}</p></div><small>${m[2]}</small></button>`; }).join('')}</div>`;
-  else body = `<div class="my-ads">${mine.map((it,i) => `<div class="my-ad"><a href="#/l/${it.id}" class="my-ad-art">${ART(artOf(it), vOf(it.id))}</a><div class="my-ad-b"><a href="#/l/${it.id}"><b>${esc(title(it))}</b></a><span>${priceHTML(it.price, it.unit)}</span>
+  else body = `<div class="my-ads">${mine.map((it,i) => `<div class="my-ad"><a href="#/l/${it.id}" class="my-ad-art">${ART(artOf(it), vOf(it.id))}${photo(it.id)}</a><div class="my-ad-b"><a href="#/l/${it.id}"><b>${esc(title(it))}</b></a><span>${priceHTML(it.price, it.unit)}</span>
       <small>${ic('eye')} ${fmt(it.views)} · ${ago(it.days)}</small></div><span class="status ${i?'pend':'act'}">${i?t('pending'):t('active')}</span><button class="btn btn-sm btn-line" data-act="demo">${ic('edit')} ${t('edit')}</button></div>`).join('')}
       <a class="btn btn-y" href="#/post">${ic('plus')} ${t('post_ad')}</a></div>`;
   const tabs = [['ads','my_ads','box'],['favs','favorites','heart'],['msgs','messages','chat']];
@@ -613,7 +614,7 @@ function toast(msg, icn='check'){
 const phoneOf = sid => { const n = sid.replace(/\D/g,''); return `+971 5${n} 4${n}2 18${n}7`; };
 function contactModal(sid, iid, svc){
   const s = co(sid), it = iid ? byId(LISTINGS, iid) : svc ? byId(SERVICES, svc) : null;
-  const mini = it ? `<div class="m-item"><div class="m-art">${ART(artOf(it), vOf(it.id))}</div><div><b>${esc(title(it))}</b>${priceHTML(it.price, it.unit)}</div></div>` : '';
+  const mini = it ? `<div class="m-item"><div class="m-art">${ART(artOf(it), vOf(it.id))}${it.cat ? photo(it.id) : pic('services', it.id)}</div><div><b>${esc(title(it))}</b>${priceHTML(it.price, it.unit)}</div></div>` : '';
   openModal(`<h2>${svc ? t('request_service') : sid && !iid ? t('contact_company') : t('contact_seller')}</h2>${mini}
     <div class="co-row"><div class="co-logo" style="--c:${s.color}">${s.ab}</div><div><b>${esc(L(s))}</b><small>${ic('shield')} ${t('verified')} · ${stars(s.rating)}</small></div></div>
     <div class="phone-row"><span class="ltr" id="mPhone">+971 5• ••• ••••</span><button class="btn btn-sm btn-dark" data-act="reveal-m" data-seller="${sid}">${ic('eye')} ${t('show_phone')}</button></div>

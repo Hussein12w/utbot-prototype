@@ -1,0 +1,31 @@
+UT BOT — photo file names (any size/format; Claude resizes them)
+==================================================================
+Missing photo = the illustration stays, nothing breaks.
+
+assets/img/categories/   (category icons + material cards on the home page)
+  excavators.jpg   حفارات            sand.jpg       رمل
+  loaders.jpg      شيولات            gravel.jpg     حصى وركام
+  bulldozers.jpg   بلدوزرات          cement.jpg     إسمنت
+  trucks.jpg       شاحنات قلابة      bricks.jpg     طوب وبلوك
+  cranes.jpg       كرينات            readymix.jpg   خرسانة جاهزة
+  rollers.jpg      مداحل             steel.jpg      حديد تسليح
+  concrete.jpg     معدات خرسانة
+  marine.jpg       معدات بحرية
+
+assets/img/services/
+  s1.jpg  نقل معدات ثقيلة (لوبد)        s4.jpg  فحص وشهادات رفع
+  s2.jpg  مشغّلون معتمدون              s5.jpg  أعمال المساحة
+  s3.jpg  صيانة ميدانية                s6.jpg  إزالة مخلفات البناء
+
+assets/img/projects/
+  p1.jpg  حفر وردم لمجمع فلل            p4.jpg  تسوية أرض صناعية
+  p2.jpg  رصف طرق داخلية               p5.jpg  دعم بحري لرصيف بحري
+  p3.jpg  توريد خرسانة جاهزة
+
+assets/img/companies/   (cover banner on the company page — wide photo)
+  co1.jpg  الفجر لتجارة المعدات الثقيلة     co5.jpg  الساحل للخدمات البحرية
+  co2.jpg  الإمارات للحفريات وتأجير المعدات co6.jpg  مصنع الشمال للطوب
+  co3.jpg  شركة الخليج للركام              co7.jpg  برايم لتأجير الكرينات
+  co4.jpg  العين للخرسانة الجاهزة          co8.jpg  الواحة للمقاولات العامة
+
+assets/img/listings/   (done) l1–l16, m1–m8
