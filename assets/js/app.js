@@ -1,4 +1,4 @@
-/* UT BOT — interactive frontend prototype. Vanilla JS, hash routing, no backend, nothing is stored. */
+/* Bulldozer — interactive frontend prototype. Vanilla JS, hash routing, no backend, nothing is stored. */
 (function(){
 'use strict';
 const S = { lang:'ar', user:null, favs:new Set(['l3','m4']), city:'', post:null, f:{}, slide:0, notifRead:false, gal:null, coType:'', lastPath:null, keepScroll:false, q:'' };
@@ -66,7 +66,7 @@ const P = {
 };
 const ic = (n, c='') => `<svg class="ic ${c}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${P[n]||''}</svg>`;
 const logoMark = () => `<svg viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="10" fill="#F7B500"/><path d="M8 29h24l-3.5 5h-17z" fill="#1E1F22"/><path d="M13 29V18l8.5-7 7.5 6-3.6 4.4-4-3.2-2.6 2.1V29" fill="none" stroke="#1E1F22" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round"/></svg>`;
-const logo = () => `<a href="#/" class="logo" aria-label="UT BOT"><span class="logo-mark">${logoMark()}</span><span class="logo-word">UT<b>BOT</b></span></a>`;
+const logo = () => `<a href="#/" class="logo" aria-label="Bulldozer"><span class="logo-mark">${logoMark()}</span><span class="logo-word">Bull<b>dozer</b></span></a>`;
 
 /* ---------------- Shell ---------------- */
 const NAV = [
@@ -107,8 +107,8 @@ function shell(){
     <div class="ftr-about">${logo()}<p>${t('f_about')}</p><span class="badge-soon">${ic('phone')} ${t('download_app')}</span></div>
     <div><h4>${t('f_links')}</h4><a href="#/equipment">${t('equipment')}</a><a href="#/materials">${t('materials')}</a><a href="#/projects">${t('projects')}</a><a href="#/companies">${t('companies')}</a><a href="#/services">${t('services')}</a></div>
     <div><h4>${t('f_help')}</h4><a href="#" data-act="demo">${t('about')}</a><a href="#" data-act="demo">${t('pricing')}</a><a href="#" data-act="demo">${t('faq')}</a><a href="#" data-act="demo">${t('terms')}</a><a href="#" data-act="demo">${t('privacy')}</a></div>
-    <div><h4>${t('f_contact')}</h4><p class="ltr">+971 4 000 0000</p><p class="ltr">hello@utbot.ae</p><p>${L(city('dxb'))} — ${t('x_country')}</p></div>
-  </div><div class="wrap ftr-bot"><span>© 2026 UT BOT — ${t('rights')}</span><span class="muted">${t('sample')}</span></div></footer>
+    <div><h4>${t('f_contact')}</h4><p class="ltr">+971 4 000 0000</p><p class="ltr">hello@bulldozer.ae</p><p>${L(city('dxb'))} — ${t('x_country')}</p></div>
+  </div><div class="wrap ftr-bot"><span>© 2026 Bulldozer — ${t('rights')}</span><span class="muted">${t('sample')}</span></div></footer>
   <nav class="tabbar">
     <a href="#/" data-tab="">${ic('home')}<span>${t('home')}</span></a>
     <a href="#/equipment" data-tab="equipment">${ic('grid')}<span>${t('equipment')}</span></a>
@@ -239,11 +239,9 @@ function vHome(){
 
   <section class="wrap intents">
     <div class="intent i-buy"><div class="i-txt"><h2>${t('buy_title')}</h2><p>${t('buy_desc')}</p>
-      <div class="i-btns"><a class="btn btn-y" href="#/post?type=proj">${t('buy_btn')}</a><a class="btn btn-line" href="#/browse/sale">${t('sale')}</a><a class="btn btn-line" href="#/browse/rent">${t('rent')}</a></div></div>
-      <div class="i-art">${ART('excavator',1,true)}</div></div>
+      <div class="i-btns"><a class="btn btn-y" href="#/post?type=proj">${t('buy_btn')}</a><a class="btn btn-line" href="#/browse/sale">${t('sale')}</a><a class="btn btn-line" href="#/browse/rent">${t('rent')}</a></div></div></div>
     <div class="intent i-sell"><div class="i-txt"><h2>${t('sell_title')}</h2><p>${t('sell_desc')}</p>
-      <div class="i-btns"><a class="btn btn-y" href="#/post">${t('sell_btn')}</a></div></div>
-      <div class="i-art">${ART('loader',0,true)}</div></div>
+      <div class="i-btns"><a class="btn btn-y" href="#/post">${t('sell_btn')}</a></div></div></div>
     <div class="stats">
       <div>${ic('crane')}<b>+15,000</b><span>${t('st_eq')}</span></div><div>${ic('building')}<b>+3,200</b><span>${t('st_co')}</span></div>
       <div>${ic('road')}<b>+8,000</b><span>${t('st_pr')}</span></div><div>${ic('users')}<b>+25,000</b><span>${t('st_us')}</span></div>
@@ -258,7 +256,7 @@ function vHome(){
   <section class="wrap sec">${secHead(t('sec_mat'), '#/materials')}
     <div class="mat-grid">${matCats.map(c => `<a class="mat" href="#/c/${c.id}"><div class="mat-art">${ART(c.art, 0)}${pic('categories', c.id)}</div><div class="mat-b"><b>${L(c)}</b><small>${t('from')} ${fmt(minP(c.id))} ${t('cur')} ${t('u_'+unitOf(c.id))}</small></div></a>`).join('')}</div></section>
 
-  <section class="wrap"><div class="promo"><div class="promo-txt"><h2>${t('promo_t')}</h2><p>${t('promo_p')}</p><a class="btn btn-y btn-lg" href="#/post?type=rent">${ic('plus')} ${t('promo_btn')}</a></div><div class="promo-art">${ART('crane',0,true)}</div></div></section>
+  <section class="wrap"><div class="promo"><div class="promo-txt"><h2>${t('promo_t')}</h2><p>${t('promo_p')}</p><a class="btn btn-y btn-lg" href="#/post?type=rent">${ic('plus')} ${t('promo_btn')}</a></div></div></section>
 
   <section class="wrap sec">${secHead(t('latest'), '#/all')}<div class="hscroll">${latest.map(card).join('')}</div></section>
 
@@ -361,7 +359,7 @@ function vListing(id){
   if (it.delivery) rows.push([t('delivery'), t('available')]);
   if (it.op) rows.push([t('operator'), t('with_op')]);
   (it.specs || []).forEach(sp => rows.push([L(SPEC_LABELS[sp[0]]) || sp[0], sp[1]]));
-  rows.push([t('ad_no'), 'UT-' + (10240 + vOf(id) * 7 + id.length * 13)]);
+  rows.push([t('ad_no'), 'BD-' + (10240 + vOf(id) * 7 + id.length * 13)]);
   const similar = LISTINGS.filter(l => l.id !== id && (l.cat === it.cat || cat(l.cat).g === c.g)).sort((a,b) => (b.cat===it.cat) - (a.cat===it.cat)).slice(0, 4);
   return `<div class="wrap detail-wrap">${crumbs([[t(c.g), '#/'+c.g],[L(c), '#/c/'+c.id],[title(it)]])}
   <div class="detail">
@@ -706,7 +704,7 @@ document.addEventListener('click', e => {
     case 'pcover': { const i = +a.dataset.i; Pp.imgs.unshift(Pp.imgs.splice(i, 1)[0]); rerenderPost(); break; }
     case 'prm': { const [im] = Pp.imgs.splice(+a.dataset.i, 1); if (im && im.url) URL.revokeObjectURL(im.url); rerenderPost(); break; }
     case 'publish': if (!postValidate()) { toast(t('agree_msg'), 'info'); rerenderPost(); return; }
-      Pp.done = true; Pp.ref = 'UT-D' + Math.floor(100000 + Math.random() * 900000); rerenderPost(); window.scrollTo(0, 0); break;
+      Pp.done = true; Pp.ref = 'BD-D' + Math.floor(100000 + Math.random() * 900000); rerenderPost(); window.scrollTo(0, 0); break;
     case 'pnew': S.post = newPost(); goHash('#/post'); break;
   }
 });

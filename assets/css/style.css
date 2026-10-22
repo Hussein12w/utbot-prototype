@@ -1,4 +1,4 @@
-/* UT BOT — prototype styles. Palette: yellow / black / white / light gray */
+/* Bulldozer — prototype styles. Palette: yellow / black / white / light gray */
 :root{
   --y:#F7B500; --y2:#FFD24D; --yd:#D69A00; --ysoft:#FFF6DB;
   --k:#16171A; --k2:#26282C; --k3:#3A3D42;
@@ -64,7 +64,7 @@ p{margin:0}
 .brand{display:flex;align-items:center;gap:14px;flex:none}
 .logo{display:inline-flex;align-items:center;gap:10px}
 .logo-mark svg{width:42px;height:42px;display:block}
-.logo-word{font-size:30px;font-weight:900;letter-spacing:-1px;line-height:1;direction:ltr}
+.logo-word{font-size:28px;font-weight:900;letter-spacing:-1px;line-height:1;direction:ltr}
 .logo-word b{color:var(--y);font-weight:900}
 .brand-txt{display:flex;flex-direction:column;line-height:1.35;padding-inline-start:14px;border-inline-start:1px solid var(--line)}
 .brand-txt strong{font-size:15px;font-weight:800}

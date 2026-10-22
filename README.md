@@ -1,6 +1,6 @@
-# UT BOT — UI Prototype
+# Bulldozer — UI Prototype
 
-Interactive frontend prototype for **UT BOT**, a marketplace for selling and renting heavy construction equipment, marine equipment, construction materials and project services.
+Interactive frontend prototype for **Bulldozer**, a marketplace for selling and renting heavy construction equipment, marine equipment, construction materials and project services.
 
 - Arabic (RTL, default), English and Urdu (RTL)
 - Home, categories, listings, listing details, projects, companies, services, favorites, demo login/account

@@ -1,4 +1,4 @@
-UT BOT — photo file names (any size/format; Claude resizes them)
+Bulldozer — photo file names (any size/format; Claude resizes them)
 ==================================================================
 Missing photo = the illustration stays, nothing breaks.
 
