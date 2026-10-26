@@ -368,6 +368,16 @@ const ART = (() => {
       return s+`<path d="M128 140 L134 186 M268 114 L274 160" stroke="${Y}" stroke-width="9"/>`;},
     road:()=>`<path d="M96 262 L186 132 L214 132 L324 262 Z" fill="#3d4148"/><path d="M200 140 L200 154 M200 168 L200 188 M200 204 L200 236" stroke="${Y}" stroke-width="5"/>
       <path d="M300 214 L312 176 L324 214 Z" fill="${Y}"/><rect x="304" y="192" width="16" height="6" fill="${K}"/><path d="M86 214 L96 184 L106 214 Z" fill="${Y}"/><rect x="89" y="198" width="14" height="5" fill="${K}"/>`,
+    generator:()=>`<rect x="104" y="188" width="212" height="12" rx="3" fill="${K}"/><rect x="112" y="92" width="196" height="98" rx="8" fill="${Y}"/>
+      <rect x="112" y="92" width="196" height="12" rx="6" fill="${YD}"/><rect x="128" y="114" width="64" height="58" rx="5" fill="${K}"/>
+      <rect x="138" y="124" width="22" height="14" rx="2" fill="#7ee08a"/><circle cx="174" cy="131" r="6" fill="#ef4444"/><rect x="138" y="146" width="44" height="6" rx="2" fill="#7a8089"/>
+      <path d="M212 116 h80 M212 130 h80 M212 144 h80 M212 158 h80 M212 172 h80" stroke="${YD}" stroke-width="5"/>
+      <rect x="270" y="62" width="14" height="32" rx="2" fill="${K}"/><rect x="266" y="58" width="22" height="7" rx="2" fill="${K}"/>`,
+    cabin:()=>`<rect x="92" y="196" width="24" height="10" fill="${K}"/><rect x="304" y="196" width="24" height="10" fill="${K}"/>
+      <rect x="84" y="92" width="252" height="106" rx="4" fill="#eef1f4"/><rect x="84" y="86" width="252" height="12" rx="3" fill="${Y}"/>
+      ${[0,1,2,3,4,5,6,7,8,9,10,11].map(i=>`<line x1="${96+i*20}" y1="100" x2="${96+i*20}" y2="196" stroke="#d5dae0" stroke-width="3"/>`).join('')}
+      <rect x="110" y="116" width="62" height="40" rx="3" fill="#33485c"/><path d="M116 150 L140 122" stroke="#fff" stroke-opacity=".3" stroke-width="5"/>
+      <rect x="248" y="116" width="62" height="40" rx="3" fill="#33485c"/><rect x="194" y="112" width="40" height="86" rx="3" fill="${YD}"/><circle cx="226" cy="158" r="3" fill="${K}"/>`,
     service:()=>`<path d="M124 168 Q124 88 200 88 Q276 88 276 168 Z" fill="${Y}"/><rect x="104" y="164" width="192" height="16" rx="8" fill="${YD}"/>
       <rect x="192" y="88" width="16" height="78" rx="4" fill="${YD}"/><path d="M150 120 Q170 98 196 96" stroke="#fff" stroke-opacity=".45" stroke-width="6" fill="none" stroke-linecap="round"/>`,
     company:()=>{let s=`<rect x="128" y="58" width="92" height="150" fill="#2f3237"/><rect x="230" y="100" width="72" height="108" fill="#454950"/><rect x="128" y="52" width="92" height="8" fill="${Y}"/>`;

@@ -22,10 +22,18 @@ assets/img/projects/
   p2.jpg  رصف طرق داخلية               p5.jpg  دعم بحري لرصيف بحري
   p3.jpg  توريد خرسانة جاهزة
 
-assets/img/companies/   (cover banner on the company page — wide photo)
-  co1.jpg  الفجر لتجارة المعدات الثقيلة     co5.jpg  الساحل للخدمات البحرية
-  co2.jpg  الإمارات للحفريات وتأجير المعدات co6.jpg  مصنع الشمال للطوب
-  co3.jpg  شركة الخليج للركام              co7.jpg  برايم لتأجير الكرينات
-  co4.jpg  العين للخرسانة الجاهزة          co8.jpg  الواحة للمقاولات العامة
+assets/img/companies/   (cover banner on an advertiser's profile page — wide photo; demo accounts)
+  a1.jpg  شركة تجريبية للمعدات        a4.jpg  مقاول تجريبي مصنّف
+  a2.jpg  مؤسسة تجريبية للتأجير       a5.jpg  مورد تجريبي
+  a3.jpg  معلن فرد تجريبي
 
 assets/img/listings/   (done) l1–l16, m1–m8
+  New sample ads (optional photos):
+  w1.jpg  مطلوب حفارة 20–30 طن           g1.jpg  مولد كاتربيلر 500 KVA
+  w2.jpg  مطلوب شيول للإيجار             g2.jpg  مولد 250 KVA للإيجار
+  w3.jpg  مطلوب رمل ردم                  g3.jpg  مولد بيركنز 100 KVA
+  x1.jpg  تبادل حفارة كوماتسو PC200      c1.jpg  كرفان مكتب موقع
+  x2.jpg  تبادل كرين 50 طن               c2.jpg  سكن عمال متنقل
+  k1.jpg  مقاول حفريات مصنّف             c3.jpg  كرفان حمامات
+  k2.jpg  مقاول طرق وأسفلت               o1.jpg  قطع غيار حفارات
+                                         o2.jpg  معدات سلامة

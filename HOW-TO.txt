@@ -26,6 +26,19 @@ ADDING REAL PHOTOS (optional)
   Hero photos: assets/img/hero-1.jpg and hero-2.jpg.
 
 EDITING CONTENT
-  assets/js/data.js  -> texts (AR/EN), categories, listings, companies, projects, services
-  assets/css/style.css -> colors at the top (:root), layout, responsive rules
-  assets/js/app.js   -> pages and interactions
+  assets/js/data.js     -> base texts (AR/EN), equipment categories, listings, projects, services
+  assets/js/data-ur.js  -> Urdu texts
+  assets/js/data-v2.js  -> ad sections, 19 company categories, demo advertisers, new sample ads, v2 texts (AR/EN/UR)
+  assets/js/core.js     -> helpers, header/footer, shared cards, router
+  assets/js/pages.js    -> home, sections, listing pages, company directory, advertiser profiles, search
+  assets/js/account.js  -> phone login, profile completion + verified badge, my account, popups
+  assets/js/post.js     -> post / request wizard
+  assets/js/events.js   -> clicks, forms, startup
+  assets/css/style.css  -> colors at the top (:root), layout, responsive rules
+
+DEMO TIPS
+  - Log in: any UAE mobile number, then any 4-digit code (e.g. 1234).
+  - "حساب جديد" lets you register as individual / company / contractor; then fill the profile
+    ("تعبئة بيانات تجريبية" button) and save to get the green verified check.
+  - A verified company appears in its category in the company directory.
+  - Only a verified contractor can post "مقاول متاح" ads.
