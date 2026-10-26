@@ -186,7 +186,7 @@ function shell(){
   </header>
   <main id="view"></main>
   <footer class="ftr"><div class="wrap ftr-grid">
-    <div class="ftr-about">${logo()}<p>${t('f_about')}</p><span class="badge-soon">${ic('tag')} ${t('free_note')}</span></div>
+    <div class="ftr-about">${logo()}<p>${t('f_about')}</p></div>
     <div><h4>${t('f_links')}</h4>${['heavy','wanted','opp','exchange','contractor'].map(id => `<a href="#/s/${id}">${L(sec(id))}</a>`).join('')}<a href="#/companies">${t('dir_h')}</a></div>
     <div><h4>${t('f_help')}</h4><a href="#" data-act="demo">${t('about')}</a><a href="#" data-act="boost">${t('pricing')}</a><a href="#" data-act="demo">${t('faq')}</a><a href="#" data-act="demo">${t('terms')}</a><a href="#" data-act="demo">${t('privacy')}</a></div>
     <div><h4>${t('f_contact')}</h4><p class="ltr">+971 4 000 0000</p><p class="ltr">hello@bulldozer.ae</p><p>${L(city('dxb'))} — ${t('x_country')}</p></div>

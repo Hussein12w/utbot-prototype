@@ -65,7 +65,7 @@ function vLogin(params){
     <button class="btn btn-y btn-lg full" type="submit">${ic('check')} ${t('verify')}</button>
     <button type="button" class="link small center" data-act="resend">${t('resend')}</button>`;
   return `<div class="wrap auth"><div class="auth-card">
-    <div class="auth-side"><div class="as-art">${ART('excavator', 0, true)}</div><h2>${t('who_t')}</h2><ul><li>${ic('check')} ${t('login_side1')}</li><li>${ic('check')} ${t('login_side2')}</li><li>${ic('check')} ${t('free_note')}</li></ul></div>
+    <div class="auth-side"><div class="as-art">${ART('excavator', 0, true)}</div><h2>${t('who_t')}</h2><ul><li>${ic('check')} ${t('login_side1')}</li><li>${ic('check')} ${t('login_side2')}</li></ul></div>
     <div class="auth-form"><h1>${t('welcome')}</h1><p class="muted">${t('phone_login_t')}</p>
       <div class="tabs"><a href="#/login" data-act="auth-tab" data-m="login" class="${reg?'':'on'}">${t('login_tab')}</a><a href="#/login?tab=register" data-act="auth-tab" data-m="register" class="${reg?'on':''}">${t('reg_tab')}</a></div>
       <form data-form="auth" novalidate>${L1.step === 'code' ? codeStep : phoneStep}
@@ -111,7 +111,7 @@ function vAccount(tab){
         return `<div class="my-ad${m.st==='exp'?' is-exp':''}"><a href="#/l/${it.id}" class="my-ad-art">${ART(artOf(it), vOf(it.id))}${photo(it.id)}</a><div class="my-ad-b"><a href="#/l/${it.id}"><b>${esc(title(it))}</b></a><span>${priceOf(it)}</span>
           <small>${ic('eye')} ${fmt(it.views)} · ${m.st==='exp' ? t('renew_free_ends') : t('expires_in').replace('{n}', m.left)}</small></div>${stl}
           ${m.st==='exp' ? `<button class="btn btn-sm btn-y" data-act="boost">${ic('bolt')} ${t('renew_boost')}</button>` : `<button class="btn btn-sm btn-line" data-act="demo">${ic('edit')} ${t('edit')}</button>`}</div>`; }).join('')}
-      <div class="row-btns"><a class="btn btn-y" href="#/post">${ic('plus')} ${t('post_ad')}</a><a class="btn btn-line" href="#/post?mode=request">${ic('search')} ${t('post_request')}</a><span class="free-chip">${ic('tag')} ${t('free_note')}</span></div></div>`;
+      <div class="row-btns"><a class="btn btn-y" href="#/post">${ic('plus')} ${t('post_ad')}</a><a class="btn btn-line" href="#/post?mode=request">${ic('search')} ${t('post_request')}</a></div></div>`;
   const tabs = [['profile','my_profile','user'],['ads','my_ads','box'],['favs','favorites','heart'],['msgs','messages','chat']];
   return `<section class="page-head slim"><div class="wrap head-flex"><div><h1>${t('hello')}${S.lang==='en'?', ':'، '}${esc(u.name)} ${vbadge(u)}</h1><p>${t('acc_sub')} · ${t('k_'+u.kind)}</p></div><a class="btn btn-line" href="#/u/me">${ic('eye')} ${t('see_profile')}</a></div></section>
   <div class="wrap account"><aside class="acc-nav">${tabs.map(x => `<a href="#/account/${x[0]}" class="${tab===x[0]?'on':''}">${ic(x[2])} ${t(x[1])}${x[0]==='profile'&&!u.verified?'<i class="dot-warn"></i>':''}</a>`).join('')}<button data-act="logout">${ic('logout')} ${t('logout')}</button></aside>

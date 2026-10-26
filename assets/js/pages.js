@@ -41,7 +41,7 @@ function vHome(){
     <div class="intent i-buy"><div class="i-txt"><h2>${t('buy_title')}</h2><p>${t('buy_desc')}</p>
       <div class="i-btns"><a class="btn btn-y" href="#/post?mode=request">${ic('search')} ${t('buy_btn')}</a><a class="btn btn-line" href="#/s/wanted">${L(sec('wanted'))}</a></div></div></div>
     <div class="intent i-sell"><div class="i-txt"><h2>${t('sell_title')}</h2><p>${t('sell_desc')}</p>
-      <div class="i-btns"><a class="btn btn-y" href="#/post?mode=offer">${ic('plus')} ${t('sell_btn')}</a><span class="free-chip dark">${ic('tag')} ${t('free_note')}</span></div></div></div>
+      <div class="i-btns"><a class="btn btn-y" href="#/post?mode=offer">${ic('plus')} ${t('sell_btn')}</a></div></div></div>
     <div class="stats">
       <div>${ic('crane')}<b>+15,000</b><span>${t('st_eq')}</span></div><div>${ic('building')}<b>+3,200</b><span>${t('st_co')}</span></div>
       <div>${ic('road')}<b>+8,000</b><span>${t('st_pr')}</span></div><div>${ic('users')}<b>+25,000</b><span>${t('st_us')}</span></div>

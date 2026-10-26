@@ -19,13 +19,12 @@ function vPost(params){
     S.after = '#/post' + (params && params.toString() ? '?' + params.toString() : '');
     return `<section class="page-head slim"><div class="wrap">${crumbs([[t('post_ad')]])}<h1>${t('post_title')}</h1></div></section>
       <div class="wrap post"><div class="post-card gate">${ic('shield')}<h2>${t('login_first_t')}</h2><p>${t('login_first_p')}</p>
-        <div class="row-btns center"><a class="btn btn-y btn-lg" href="#/login">${ic('phone')} ${t('login')}</a><a class="btn btn-line btn-lg" href="#/login?tab=register">${t('reg_tab')}</a></div>
-        <span class="free-chip">${ic('tag')} ${t('free_note')}</span></div></div>`;
+        <div class="row-btns center"><a class="btn btn-y btn-lg" href="#/login">${ic('phone')} ${t('login')}</a><a class="btn btn-line btn-lg" href="#/login?tab=register">${t('reg_tab')}</a></div></div></div>`;
   }
   const ty = params.get('type'), mode = params.get('mode');
   if (!S.post || (S.post.done && !S.keepScroll) || (ty && ty !== S.post.type && !S.keepScroll) || (mode && !ty && mode !== S.post.mode && !S.keepScroll)) S.post = newPost(ty, mode);
   const Pp = S.post;
-  return `<section class="page-head slim"><div class="wrap head-flex"><div>${crumbs([[t('post_ad')]])}<h1>${Pp.mode==='request'?t('buy_btn'):t('post_title')}</h1><p>${t('post_sub')}</p></div><span class="free-chip">${ic('tag')} ${t('free_note')}</span></div></section>
+  return `<section class="page-head slim"><div class="wrap head-flex"><div>${crumbs([[t('post_ad')]])}<h1>${Pp.mode==='request'?t('buy_btn'):t('post_title')}</h1><p>${t('post_sub')}</p></div></div></section>
   <div class="wrap post">${Pp.done ? postDone() : `
     ${S.user.verified ? '' : `<div class="warn-bar">${ic('info')} ${t('unverified_note')} <a href="#/account/profile">${t('complete_now')}</a></div>`}
     <ol class="steps">${[1,2,3,4,5].map(i => `<li class="${i<Pp.step?'done':''}${i===Pp.step?' cur':''}"><span>${i<Pp.step?ic('check'):i}</span><em>${t('s'+i)}</em></li>`).join('')}</ol>
