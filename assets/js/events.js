@@ -38,6 +38,8 @@ document.addEventListener('click', e => {
   if (act === 'city' || act === 'files') return;
   const Pp = S.post, L1 = S.login;
   switch (act) {
+    case 'back': e.preventDefault(); if ((S.depth || 0) > 1 && history.length > 1) history.back(); else goHash('#/'); break;
+    case 'home-deal': S.homeDeal = a.dataset.d; { const el = $('#catSec'); if (el) el.innerHTML = catSection(); } break;
     case 'hide-strip': S.hideStrip = true; $('#demoStrip').hidden = true; break;
     case 'drawer': { const d = $('#drawer'); d.hidden = !d.hidden; document.body.classList.toggle('noscroll', !d.hidden); break; }
     case 'drawer-link': $('#drawer').hidden = true; document.body.classList.remove('noscroll'); break;
@@ -84,7 +86,7 @@ document.addEventListener('click', e => {
     case 'pback': Pp.step = Math.max(1, Pp.step - 1); Pp.err = []; rerenderPost(); break;
     case 'psample': { const s = SAMPLES[Pp.type]; Object.assign(Pp.d, JSON.parse(JSON.stringify(s.d)), s[S.lang] || s.en); Pp.err = [];
       if (!Pp.city) { Pp.city = 'auh'; Pp.area = t('x_area'); Pp.pin = {x:city('auh').x + 8, y:city('auh').y - 4}; } rerenderPost(); break; }
-    case 'psamples': { const d = Pp.d; const art = Pp.type === 'materials' ? (cat(d.mtype).art || 'sand') : (cat(d.cat || d.need).art || sec(Pp.type).art || 'excavator');
+    case 'psamples': { const d = Pp.d; const art = (Pp.type === 'materials' || Pp.type === 'sandgravel') ? (cat(d.mtype).art || 'sand') : (cat(d.cat || d.need).art || sec(Pp.type).art || 'excavator');
       for (let i = 0; i < 4 && Pp.imgs.length < 10; i++) Pp.imgs.push({art, v:i}); rerenderPost(); break; }
     case 'pcover': { const i = +a.dataset.i; Pp.imgs.unshift(Pp.imgs.splice(i, 1)[0]); rerenderPost(); break; }
     case 'prm': { const [im] = Pp.imgs.splice(+a.dataset.i, 1); if (im && im.url) URL.revokeObjectURL(im.url); rerenderPost(); break; }

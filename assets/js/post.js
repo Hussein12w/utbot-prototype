@@ -1,12 +1,12 @@
 /* Bulldozer — post / request wizard (demo only — nothing is saved or published). */
 const PT = {
-  offer:   [['heavy','excavator'],['exchange','crane'],['generators','generator'],['cabins','cabin'],['materials','gravel'],['contractor','service'],['other','service']],
+  offer:   [['heavy','excavator'],['marine_leisure','boat'],['marine_port','marine'],['exchange','crane'],['generators','generator'],['cabins','cabin'],['materials','cement'],['sandgravel','gravel'],['contractor','service'],['other','service']],
   request: [['wanted','loader'],['opp','road']]
 };
 const PT_ALL = PT.offer.concat(PT.request);
 const ptMode = ty => PT.request.some(p => p[0] === ty) ? 'request' : 'offer';
 const REQ = { heavy:['title','cat','deal','price'], exchange:['title','cat','want'], generators:['title','deal','power','price'], cabins:['title','deal','price'],
-  materials:['mtype','title','qty','price'], contractor:['title','spec','desc'], other:['title','price'], wanted:['title','need','budget'], opp:['title','ptype','b1','desc'] };
+  materials:['mtype','title','qty','price'], sandgravel:['mtype','title','qty','price'], marine_leisure:['title','deal','price'], marine_port:['title','deal','price'], contractor:['title','spec','desc'], other:['title','price'], wanted:['title','need','budget'], opp:['title','ptype','b1','desc'] };
 const canContract = () => S.user && S.user.kind === 'contractor' && S.user.verified;
 const newPost = (type, mode) => {
   const ok = PT_ALL.some(p => p[0] === type) && !(type === 'contractor' && !canContract());
@@ -59,7 +59,9 @@ function postFields(){
   else if (ty === 'exchange') h = `${titleF}${fld('cat','f_have','select',{opts:eqOpts()})}${fld('brand','f_brand')}${fld('year','f_year','select',{opts:years()})}${fld('want','f_want','text',{full:true})}${descF}`;
   else if (ty === 'generators') h = `${titleF}${saleRent()}${fld('brand','f_brand','text',{ph:'CAT, Perkins, Cummins…'})}${fld('power','f_power','number')}${fld('year','f_year','select',{opts:years()})}${fld('hours','f_hours','number')}${fld('price','f_price','number')}${descF}`;
   else if (ty === 'cabins') h = `${titleF}${saleRent()}${fld('size','f_size','text',{ph:'6 × 3 m'})}${fld('rooms','f_rooms','number')}${fld('price','f_price','number')}${descF}`;
-  else if (ty === 'materials') h = `${fld('mtype','f_mat_type','select',{opts:CATS.filter(c => c.g==='materials').map(c => [c.id, L(c)])})}${fld('title','f_mat_name')}
+  else if (ty === 'marine_leisure' || ty === 'marine_port') h = `${titleF}${saleRent()}${fld('brand','f_brand')}${fld('model','f_model')}${fld('year','f_year','select',{opts:years()})}${fld('hours','f_hours','number')}
+    ${d.deal==='rent' ? chipsF('period','f_period',[['day',t('p_day')],['week',t('p_week')],['month',t('p_month')]]) + `<div class="fld">${toggleF('op','f_operator')}</div>` : ''}${fld('price','f_price','number')}${descF}`;
+  else if (ty === 'materials' || ty === 'sandgravel') h = `${fld('mtype','f_mat_type','select',{opts:CATS.filter(c => c.g==='materials' && (ty === 'sandgravel') === ['sand','gravel'].includes(c.id)).map(c => [c.id, L(c)])})}${fld('title','f_mat_name')}
     ${fld('qty','f_qty','number')}${fld('unit','f_unit','select',{opts:[['ton',t('x_ton')],['m3','م³ / m³'],['bag',t('x_bag')],['piece',t('x_piece')]]})}${fld('price','f_unit_price','number')}<div class="fld">${toggleF('delivery','f_delivery')}</div>${descF}`;
   else if (ty === 'contractor') { const u = S.user.p;
     h = `<div class="lic-box full">${ic('shield')}<div><b>${t('licensed_contractor')}</b><small>${t('grade')}: ${t(u.grade||'g1')} · ${t('license_no')}: <span class="ltr">${esc(u.clic||'')}</span></small></div></div>
@@ -81,8 +83,14 @@ const SAMPLES = {
     ar:{title:'مولد كامينز 300 KVA للإيجار', desc:'مع التوصيل والتركيب في الموقع.'}, en:{title:'Cummins 300 kVA generator for rent', desc:'With on-site delivery and installation.'}, ur:{title:'کمنز 300 kVA جنریٹر کرائے پر', desc:'سائٹ پر ترسیل اور تنصیب کے ساتھ۔'}},
   cabins:{d:{deal:'sale', size:'6 × 3 m', rooms:2, price:26000},
     ar:{title:'كرفان مكتب موقع جديد', desc:'معزول بالكامل مع مكيف وإنارة.'}, en:{title:'New site office cabin', desc:'Fully insulated with AC and lighting.'}, ur:{title:'نیا سائٹ آفس کیبن', desc:'مکمل موصل، اے سی اور روشنی کے ساتھ۔'}},
-  materials:{d:{mtype:'sand', qty:3000, unit:'ton', price:42, delivery:true},
-    ar:{title:'رمل مغسول 0–5 مم', desc:'مطابق للمواصفات مع توريد سريع.'}, en:{title:'Washed sand 0–5 mm', desc:'Spec-compliant with fast delivery.'}, ur:{title:'دھلی ہوئی ریت 0–5 ملی میٹر', desc:'معیار کے مطابق، تیز ترسیل۔'}},
+  marine_leisure:{d:{deal:'rent', brand:'Yamaha', model:'242X', year:2023, hours:80, price:1800, period:'day', op:true},
+    ar:{title:'قارب نزهة 24 قدم للإيجار مع قبطان', desc:'يتسع لـ 10 أشخاص، مع سترات نجاة ووقود.'}, en:{title:'24 ft leisure boat for rent with captain', desc:'Seats 10, with life jackets and fuel.'}, ur:{title:'24 فٹ تفریحی کشتی کپتان کے ساتھ کرائے پر', desc:'10 افراد، لائف جیکٹس اور ایندھن کے ساتھ۔'}},
+  marine_port:{d:{deal:'sale', brand:'—', model:'Flat-top barge 50 m', year:2015, price:950000},
+    ar:{title:'بارجة مسطحة 50 م للبيع', desc:'بارجة بحالة جيدة مع شهادات تصنيف سارية.'}, en:{title:'50 m flat-top barge for sale', desc:'Barge in good condition with valid class certificates.'}, ur:{title:'50 میٹر فلیٹ ٹاپ بارج برائے فروخت', desc:'اچھی حالت میں بارج، مؤثر سرٹیفکیٹس کے ساتھ۔'}},
+  sandgravel:{d:{mtype:'gravel', qty:5000, unit:'ton', price:36, delivery:true},
+    ar:{title:'حصى مكسّر 20 مم', desc:'من محاجر الفجيرة مع توريد للموقع.'}, en:{title:'Crushed gravel 20 mm', desc:'From Fujairah quarries with site delivery.'}, ur:{title:'پسی ہوئی بجری 20 ملی میٹر', desc:'فجیرہ کی کانوں سے، سائٹ تک ترسیل کے ساتھ۔'}},
+  materials:{d:{mtype:'cement', qty:3000, unit:'bag', price:17, delivery:true},
+    ar:{title:'إسمنت بورتلاندي 50 كغ', desc:'مطابق للمواصفات مع توريد سريع.'}, en:{title:'Portland cement 50 kg', desc:'Spec-compliant with fast delivery.'}, ur:{title:'پورٹ لینڈ سیمنٹ 50 کلو', desc:'معیار کے مطابق، تیز ترسیل۔'}},
   contractor:{d:{cov:['auh','dxb']},
     ar:{title:'مقاول حفريات وردم متاح لمشاريع جديدة', spec:'حفريات وردم', desc:'أسطول معدات خاص وفريق فني ذو خبرة.'}, en:{title:'Excavation contractor available for new projects', spec:'Excavation & backfilling', desc:'Own equipment fleet and experienced crew.'}, ur:{title:'کھدائی ٹھیکیدار نئے منصوبوں کے لیے دستیاب', spec:'کھدائی اور بھرائی', desc:'اپنے آلات اور تجربہ کار ٹیم۔'}},
   other:{d:{price:2500},
@@ -100,7 +108,8 @@ function previewItem(){
   else if (ty === 'exchange') Object.assign(it, {cat:d.cat, deal:'exchange', price:null, art:cat(d.cat).art});
   else if (ty === 'generators') Object.assign(it, {deal:d.deal || 'sale', price:+d.price || 0, unit:d.deal === 'rent' ? d.period : 'total', art:'generator'});
   else if (ty === 'cabins') Object.assign(it, {deal:d.deal || 'sale', price:+d.price || 0, unit:d.deal === 'rent' ? 'month' : 'total', art:'cabin'});
-  else if (ty === 'materials') Object.assign(it, {sec:'materials', cat:d.mtype, deal:'supply', price:+d.price || 0, unit:d.unit, qty:d.qty ? fmt(+d.qty) : ''});
+  else if (ty === 'marine_leisure' || ty === 'marine_port') Object.assign(it, {deal:d.deal || 'sale', price:+d.price || 0, unit:d.deal === 'rent' ? d.period : 'total', art:ty === 'marine_leisure' ? 'boat' : 'marine'});
+  else if (ty === 'materials' || ty === 'sandgravel') Object.assign(it, {sec:ty, cat:d.mtype, deal:'supply', price:+d.price || 0, unit:d.unit, qty:d.qty ? fmt(+d.qty) : ''});
   else if (ty === 'contractor') Object.assign(it, {deal:'contractor', price:null, art:'service'});
   else if (ty === 'other') Object.assign(it, {deal:'sale', price:+d.price || 0, unit:'total', art:'service'});
   else if (ty === 'wanted') Object.assign(it, {cat:d.need, deal:'wanted', price:+d.budget || 0, unit:'total', art:cat(d.need).art || 'loader'});

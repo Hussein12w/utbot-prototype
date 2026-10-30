@@ -37,3 +37,16 @@ assets/img/listings/   (done) l1–l16, m1–m8
   k1.jpg  مقاول حفريات مصنّف             c3.jpg  كرفان حمامات
   k2.jpg  مقاول طرق وأسفلت               o1.jpg  قطع غيار حفارات
                                          o2.jpg  معدات سلامة
+
+assets/img/logo.jpg      Site logo photo (made from hero-1). Replace with any photo to change the logo.
+
+assets/img/brands/       (optional — global brands strip at the very top; PNG with transparent background)
+  caterpillar.png  komatsu.png  volvo.png  liebherr.png  hitachi.png  jcb.png  xcmg.png  sany.png  hyundai.png
+  develon.png  tadano.png  bomag.png  dynapac.png  putzmeister.png  perkins.png  mercedes.png  yamaha.png  damen.png
+  Without a file, the brand name shows as text.
+
+assets/img/listings/   New v3 sample ads (optional photos):
+  y1.jpg  جت سكي ياماها              q1.jpg  رافعة موانئ متحركة
+  y2.jpg  قارب سريع للإيجار           q2.jpg  حفارة تجريف بحرية
+  y3.jpg  قارب صيد 32 قدم
+  y4.jpg  كاياك وألواح تجديف

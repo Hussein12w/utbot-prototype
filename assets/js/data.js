@@ -378,6 +378,12 @@ const ART = (() => {
       ${[0,1,2,3,4,5,6,7,8,9,10,11].map(i=>`<line x1="${96+i*20}" y1="100" x2="${96+i*20}" y2="196" stroke="#d5dae0" stroke-width="3"/>`).join('')}
       <rect x="110" y="116" width="62" height="40" rx="3" fill="#33485c"/><path d="M116 150 L140 122" stroke="#fff" stroke-opacity=".3" stroke-width="5"/>
       <rect x="248" y="116" width="62" height="40" rx="3" fill="#33485c"/><rect x="194" y="112" width="40" height="86" rx="3" fill="${YD}"/><circle cx="226" cy="158" r="3" fill="${K}"/>`,
+    boat:()=>`<path d="M58 160 L344 160 Q332 196 300 206 L96 206 Q70 192 58 160 Z" fill="#f4f6f8"/><path d="M58 160 L344 160 L340 172 L62 172 Z" fill="${Y}"/>
+      <path d="M150 160 L170 118 L282 118 L304 160 Z" fill="#eef1f4"/><path d="M178 124 L276 124 L290 152 L166 152 Z" fill="#33485c"/><path d="M186 148 L214 128" stroke="#fff" stroke-opacity=".35" stroke-width="5"/>
+      <rect x="226" y="92" width="6" height="28" fill="${K}"/><path d="M96 206 L300 206 Q290 214 270 216 L110 216 Z" fill="${K}"/>`,
+    jetski:()=>`<path d="M80 176 L330 176 Q322 204 292 210 L110 210 Q86 200 80 176 Z" fill="${Y}"/><path d="M80 176 L330 176 L326 186 L84 186 Z" fill="${YD}"/>
+      <path d="M150 176 Q166 136 220 132 L262 132 Q284 140 290 176 Z" fill="${K}"/><rect x="186" y="118" width="58" height="16" rx="8" fill="#33485c"/>
+      <path d="M244 132 L268 98 M262 98 L282 98" stroke="${K}" stroke-width="7" stroke-linecap="round"/><path d="M110 210 L292 210 Q280 218 262 220 L122 220 Z" fill="${K}"/>`,
     service:()=>`<path d="M124 168 Q124 88 200 88 Q276 88 276 168 Z" fill="${Y}"/><rect x="104" y="164" width="192" height="16" rx="8" fill="${YD}"/>
       <rect x="192" y="88" width="16" height="78" rx="4" fill="${YD}"/><path d="M150 120 Q170 98 196 96" stroke="#fff" stroke-opacity=".45" stroke-width="6" fill="none" stroke-linecap="round"/>`,
     company:()=>{let s=`<rect x="128" y="58" width="92" height="150" fill="#2f3237"/><rect x="230" y="100" width="72" height="108" fill="#454950"/><rect x="128" y="52" width="92" height="8" fill="${Y}"/>`;
@@ -392,7 +398,7 @@ const ART = (() => {
     if(v%2===1) g=`<g transform="translate(400 0) scale(-1 1)">${g}</g>`;
     if(v===2) g=`<g transform="translate(-60 -52) scale(1.3)">${g}</g>`;
     if(plain) return `<svg viewBox="40 28 330 190" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">${g}</svg>`;
-    const water=type==='marine';
+    const water=['marine','boat','jetski'].includes(type);
     let sky=`<rect width="400" height="260" fill="url(#${id})"/>`;
     sky+=[18,52,70,96,330,352,374].map((x,i)=>`<rect x="${x}" y="${120-(i*23%60)}" width="${14+i%3*6}" height="${100+(i*23%60)}" fill="#fff" opacity=".35"/>`).join('');
     const ground=water?`<rect y="194" width="400" height="66" fill="#86b6d3"/><path d="M0 210 Q25 204 50 210 T100 210 T150 210 T200 210 T250 210 T300 210 T350 210 T400 210" stroke="#fff" stroke-opacity=".5" stroke-width="3" fill="none"/>`

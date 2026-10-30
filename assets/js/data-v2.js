@@ -5,12 +5,15 @@
 const SECTIONS = [
   {id:'heavy',      icon:'crane',    art:'excavator', ar:'معدات ثقيلة',        en:'Heavy equipment',          ur:'بھاری آلات'},
   {id:'wanted',     icon:'search',   art:'loader',    ar:'مطلوب للشراء',       en:'Wanted to buy',            ur:'خریداری مطلوب'},
-  {id:'opp',        icon:'road',     art:'road',      ar:'فرص للمقاولين',      en:'Contractor opportunities', ur:'ٹھیکیداروں کے لیے مواقع'},
+  {id:'marine_leisure', icon:'boat', art:'boat',    ar:'معدات البحر الترفيهية', en:'Leisure marine equipment', ur:'تفریحی بحری سامان'},
+  {id:'marine_port', icon:'anchor',  art:'marine',    ar:'معدات البحر والموانئ', en:'Marine & port equipment', ur:'بحری اور بندرگاہی آلات'},
+  {id:'opp',        icon:'road',     art:'road',      ar:'فرص مشاريع للمقاولين', en:'Project opportunities for contractors', ur:'ٹھیکیداروں کے لیے منصوبوں کے مواقع'},
   {id:'exchange',   icon:'swap',     art:'crane',     ar:'تبادل معدات',        en:'Equipment exchange',       ur:'آلات کا تبادلہ'},
   {id:'generators', icon:'bolt',     art:'generator', ar:'مولدات',             en:'Generators',               ur:'جنریٹرز'},
   {id:'cabins',     icon:'cabin',    art:'cabin',     ar:'كرفانات وبيوت متنقلة', en:'Caravans & portable cabins', ur:'کارواں اور پورٹیبل کیبن'},
   {id:'contractor', icon:'helmet',   art:'service',   ar:'مقاول متاح',         en:'Available contractors',    ur:'دستیاب ٹھیکیدار'},
-  {id:'materials',  icon:'box',      art:'gravel',    ar:'مواد البناء',        en:'Construction materials',   ur:'تعمیراتی سامان'},
+  {id:'materials',  icon:'box',      art:'cement',    ar:'مواد بناء',          en:'Building materials',       ur:'تعمیراتی سامان'},
+  {id:'sandgravel', icon:'layers',   art:'gravel',    ar:'مواد رمل وحصى',      en:'Sand & gravel',            ur:'ریت اور بجری'},
   {id:'other',      icon:'grid',     art:'service',   ar:'أخرى',               en:'Other',                    ur:'دیگر'}
 ];
 /* Quick-access bar above the hero */
@@ -63,7 +66,9 @@ const DIRECTORY = [];
 /* ---------- Re-map existing sample data to the new structure ---------- */
 (function(){
   const map = {co1:'a1', co2:'a2', co3:'a5', co4:'a5', co5:'a1', co6:'a5', co7:'a1', co8:'a4'};
-  LISTINGS.forEach(l => { l.seller = map[l.seller] || 'a1'; l.sec = (CATS.find(c => c.id === l.cat) || {}).g === 'materials' ? 'materials' : 'heavy'; });
+  LISTINGS.forEach(l => { l.seller = map[l.seller] || 'a1';
+    const g = (CATS.find(c => c.id === l.cat) || {}).g;
+    l.sec = g === 'materials' ? (['sand','gravel'].includes(l.cat) ? 'sandgravel' : 'materials') : l.cat === 'marine' ? 'marine_port' : 'heavy'; });
   ['l8','m5','l9'].forEach(id => { const l = LISTINGS.find(x => x.id === id); if (l) l.urgent = true; });
   SERVICES.forEach(s => s.seller = map[s.seller] || 'a1');
   PROJECTS.forEach(p => { p.owner = map[p.owner] || 'a4'; p.sec = 'opp'; p.price = p.b1; });
@@ -126,6 +131,27 @@ LISTINGS.push(
    ar:'معدات سلامة للمواقع بالجملة', en:'Site safety equipment (wholesale)', ur:'سائٹ کے حفاظتی سامان (ہول سیل)',
    dar:'خوذ وسترات عاكسة وأحذية سلامة وحواجز مرورية بأسعار الجملة.', den:'Helmets, reflective vests, safety boots and traffic barriers at wholesale prices.', d_ur:'ہیلمٹ، ریفلیکٹو جیکٹس، حفاظتی جوتے اور ٹریفک بیریئر ہول سیل قیمت پر۔'}
 );
+/* ---------- v3: leisure marine + marine & port sample ads ---------- */
+LISTINGS.push(
+  {id:'y1', sec:'marine_leisure', deal:'sale', art:'jetski', brand:'Yamaha', model:'VX Cruiser', year:2022, hours:120, cond:'used', price:38000, unit:'total', city:'dxb', area:{ar:'دبي مارينا',en:'Dubai Marina',ur:'دبئی مرینا'}, seller:'a3', featured:true, days:1, views:211,
+   ar:'دراجة مائية (جت سكي) ياماها 2022', en:'Yamaha jet ski 2022', ur:'یاماہا جیٹ اسکی 2022',
+   dar:'جت سكي بحالة ممتازة، 120 ساعة تشغيل فقط، مع مقطورة وغطاء. صيانة لدى الوكيل.', den:'Jet ski in excellent condition, only 120 hours, with trailer and cover. Dealer serviced.', d_ur:'بہترین حالت میں جیٹ اسکی، صرف 120 گھنٹے، ٹریلر اور کور کے ساتھ۔'},
+  {id:'y2', sec:'marine_leisure', deal:'rent', art:'boat', brand:'—', model:'Speedboat 26 ft', year:2021, cond:'used', price:1500, unit:'day', city:'dxb', area:{ar:'جميرا',en:'Jumeirah',ur:'جمیرا'}, seller:'a1', urgent:true, days:0, views:164, op:true,
+   ar:'قارب سريع 26 قدم للإيجار اليومي مع قبطان', en:'26 ft speedboat for daily rent with captain', ur:'26 فٹ اسپیڈ بوٹ کپتان کے ساتھ روزانہ کرائے پر',
+   dar:'قارب سريع يتسع لـ 8 أشخاص مع قبطان مرخّص ووقود، للرحلات والصيد.', den:'Speedboat for 8 people with licensed captain and fuel, for trips and fishing.', d_ur:'8 افراد کے لیے اسپیڈ بوٹ، لائسنس یافتہ کپتان اور ایندھن کے ساتھ۔'},
+  {id:'y3', sec:'marine_leisure', deal:'sale', art:'boat', brand:'—', model:'Fishing boat 32 ft', year:2019, cond:'used', price:120000, unit:'total', city:'ajm', area:{ar:'ميناء عجمان',en:'Ajman Port',ur:'عجمان بندرگاہ'}, seller:'a5', days:3, views:97,
+   ar:'قارب صيد 32 قدم بمحركين للبيع', en:'32 ft twin-engine fishing boat for sale', ur:'32 فٹ دو انجن والی مچھلی پکڑنے کی کشتی برائے فروخت',
+   dar:'قارب صيد بمحركين خارجيين 250 حصان، مجهّز بجهاز GPS وسونار.', den:'Fishing boat with two 250 hp outboards, equipped with GPS and sonar.', d_ur:'دو 250 ہارس پاور انجن، GPS اور سونار کے ساتھ۔'},
+  {id:'y4', sec:'marine_leisure', deal:'rent', art:'jetski', brand:'—', model:'Kayak & SUP', cond:'used', price:150, unit:'day', city:'rak', area:{ar:'الحمرا',en:'Al Hamra',ur:'الحمرا'}, seller:'a2', days:2, views:58,
+   ar:'قوارب كاياك وألواح تجديف للإيجار', en:'Kayaks & paddle boards for rent', ur:'کایاک اور پیڈل بورڈ کرائے پر',
+   dar:'كاياك فردي وزوجي وألواح تجديف مع سترات نجاة، للإيجار بالساعة أو اليوم.', den:'Single and double kayaks and paddle boards with life jackets, hourly or daily.', d_ur:'لائف جیکٹ کے ساتھ کایاک اور پیڈل بورڈ، گھنٹہ وار یا روزانہ۔'},
+  {id:'q1', sec:'marine_port', deal:'rent', art:'crane', cat:'marine', brand:'Liebherr', model:'LHM 280', year:2017, hours:14000, cond:'used', price:9000, unit:'day', city:'auh', area:{ar:'ميناء خليفة',en:'Khalifa Port',ur:'خلیفہ بندرگاہ'}, seller:'a1', featured:true, days:1, views:143, op:true,
+   ar:'رافعة موانئ متحركة 84 طن للإيجار', en:'84 t mobile harbour crane for rent', ur:'84 ٹن موبائل ہاربر کرین کرائے پر',
+   dar:'رافعة موانئ متحركة لمناولة الحاويات والبضائع السائبة مع مشغّل معتمد.', den:'Mobile harbour crane for containers and bulk cargo, with certified operator.', d_ur:'کنٹینرز اور بلک کارگو کے لیے موبائل ہاربر کرین، سند یافتہ آپریٹر کے ساتھ۔'},
+  {id:'q2', sec:'marine_port', deal:'sale', art:'marine', cat:'marine', brand:'—', model:'Cutter suction dredger', year:2014, cond:'used', price:2400000, unit:'total', city:'fuj', area:{ar:'ميناء الفجيرة',en:'Fujairah Port',ur:'فجیرہ بندرگاہ'}, seller:'a1', days:6, views:71,
+   ar:'حفارة تجريف بحرية (Dredger) للبيع', en:'Cutter suction dredger for sale', ur:'کٹر سکشن ڈریجر برائے فروخت',
+   dar:'حفارة تجريف بقطر أنبوب 450 مم، مناسبة لتعميق الموانئ والقنوات.', den:'Dredger with 450 mm discharge pipe, suited to deepening ports and channels.', d_ur:'450 ملی میٹر پائپ والا ڈریجر، بندرگاہوں اور نہروں کو گہرا کرنے کے لیے۔'}
+);
 LISTINGS.forEach(l => { if (l.qty && !l.qty.ur) l.qty.ur = l.qty.en; if (l.area && !l.area.ur) l.area.ur = l.area.ar; });
 
 /* ---------- Spec labels added for the new ads ---------- */
@@ -157,7 +183,7 @@ const V2 = {
     verify:'تأكيد', resend:'إعادة إرسال الرمز', change_no:'تغيير الرقم', phone_err:'أدخل رقم هاتف صحيح', code_err:'أدخل رمزاً من 4 أرقام', code_sent:'تم إرسال الرمز (تجريبي)',
     acc_type_q:'نوع الحساب', who_t:'منصة للأفراد والشركات والمقاولين', login_side2:'علامة توثيق خضراء للحسابات المكتملة',
     my_profile:'ملفي', complete_t:'أكمل ملفك للحصول على علامة التوثيق', complete_p:'تظهر العلامة الخضراء ✓ بجانب اسمك فقط بعد إكمال جميع البيانات المطلوبة — هذا يمنحك ثقة المشترين ويحمي المنصة من الإعلانات الوهمية.',
-    completion:'اكتمال الملف', save_profile:'حفظ البيانات', profile_saved:'تم حفظ البيانات (تجريبي)', now_verified:'تهانينا! أصبح حسابك موثّقاً ✓', still_missing:'ما زالت بعض البيانات المطلوبة ناقصة',
+    completion:'اكتمال الملف', save_profile:'حفظ البيانات', profile_saved:'تم حفظ البيانات (تجريبي)', now_verified:'تهانينا! اكتمل ملفك وظهرت علامة ✓ بجانب اسمك', still_missing:'ما زالت بعض البيانات المطلوبة ناقصة',
     f_email:'البريد الإلكتروني', f_about_me:'نبذة عنك / عن الشركة', f_eid:'رقم الهوية الإماراتية', f_eid_doc:'صورة الهوية', f_co_name:'اسم الشركة', f_trade_lic:'رقم الرخصة التجارية', f_lic_exp:'تاريخ انتهاء الرخصة',
     f_lic_doc:'صورة الرخصة', f_logo:'الشعار / الصورة الشخصية', f_grade:'تصنيف المقاول', f_c_lic:'رقم رخصة المقاولات', f_spec:'التخصص', upload:'رفع ملف', uploaded:'تم الرفع', phone_verified:'رقم الهاتف مؤكَّد', profile_sample:'تعبئة بيانات تجريبية',
     trust_h:'إعلانات حقيقية وموثوقة', trust1:'تسجيل برقم الهاتف', trust1p:'كل معلن يسجّل برقم هاتف ويؤكّده برمز تحقق', trust2:'علامة التوثيق الخضراء', trust2p:'تظهر فقط للمعلنين الذين أكملوا بياناتهم ورخصهم',
@@ -197,7 +223,7 @@ const V2 = {
     verify:'Verify', resend:'Resend code', change_no:'Change number', phone_err:'Enter a valid phone number', code_err:'Enter a 4-digit code', code_sent:'Code sent (demo)',
     acc_type_q:'Account type', who_t:'For individuals, companies and contractors', login_side2:'Green verified badge for complete accounts',
     my_profile:'My profile', complete_t:'Complete your profile to get the verified badge', complete_p:'The green ✓ appears next to your name only after all required details are complete — it builds buyer trust and protects the platform from fake ads.',
-    completion:'Profile completion', save_profile:'Save details', profile_saved:'Details saved (demo)', now_verified:'Congratulations! Your account is now verified ✓', still_missing:'Some required details are still missing',
+    completion:'Profile completion', save_profile:'Save details', profile_saved:'Details saved (demo)', now_verified:'Congratulations! Your profile is complete — the ✓ now shows next to your name', still_missing:'Some required details are still missing',
     f_email:'Email', f_about_me:'About you / your company', f_eid:'Emirates ID number', f_eid_doc:'Emirates ID copy', f_co_name:'Company name', f_trade_lic:'Trade license number', f_lic_exp:'License expiry date',
     f_lic_doc:'License copy', f_logo:'Logo / profile photo', f_grade:'Contractor classification', f_c_lic:'Contracting license number', f_spec:'Specialization', upload:'Upload file', uploaded:'Uploaded', phone_verified:'Phone confirmed', profile_sample:'Fill sample details',
     trust_h:'Real, trustworthy ads', trust1:'Phone-verified sign-up', trust1p:'Every advertiser signs up with a phone number confirmed by a code', trust2:'Green verified badge', trust2p:'Shown only for advertisers who completed their details and licenses',
@@ -237,7 +263,7 @@ const V2 = {
     verify:'تصدیق کریں', resend:'کوڈ دوبارہ بھیجیں', change_no:'نمبر تبدیل کریں', phone_err:'درست فون نمبر درج کریں', code_err:'4 ہندسوں کا کوڈ درج کریں', code_sent:'کوڈ بھیج دیا گیا (نمائشی)',
     acc_type_q:'اکاؤنٹ کی قسم', who_t:'افراد، کمپنیوں اور ٹھیکیداروں کے لیے', login_side2:'مکمل اکاؤنٹس کے لیے سبز تصدیقی نشان',
     my_profile:'میری پروفائل', complete_t:'تصدیقی نشان کے لیے اپنی پروفائل مکمل کریں', complete_p:'سبز ✓ آپ کے نام کے ساتھ صرف تمام لازمی تفصیلات مکمل ہونے کے بعد ظاہر ہوتا ہے — اس سے خریداروں کا اعتماد بڑھتا ہے اور جعلی اشتہارات سے حفاظت ہوتی ہے۔',
-    completion:'پروفائل کی تکمیل', save_profile:'تفصیلات محفوظ کریں', profile_saved:'تفصیلات محفوظ ہو گئیں (نمائشی)', now_verified:'مبارک ہو! آپ کا اکاؤنٹ تصدیق شدہ ہو گیا ✓', still_missing:'کچھ لازمی تفصیلات ابھی باقی ہیں',
+    completion:'پروفائل کی تکمیل', save_profile:'تفصیلات محفوظ کریں', profile_saved:'تفصیلات محفوظ ہو گئیں (نمائشی)', now_verified:'مبارک ہو! پروفائل مکمل — آپ کے نام کے ساتھ ✓ ظاہر ہو گیا', still_missing:'کچھ لازمی تفصیلات ابھی باقی ہیں',
     f_email:'ای میل', f_about_me:'آپ / آپ کی کمپنی کا تعارف', f_eid:'اماراتی شناختی نمبر', f_eid_doc:'شناختی کارڈ کی کاپی', f_co_name:'کمپنی کا نام', f_trade_lic:'تجارتی لائسنس نمبر', f_lic_exp:'لائسنس کی میعاد',
     f_lic_doc:'لائسنس کی کاپی', f_logo:'لوگو / تصویر', f_grade:'ٹھیکیدار کی درجہ بندی', f_c_lic:'ٹھیکیداری لائسنس نمبر', f_spec:'مہارت', upload:'فائل اپ لوڈ کریں', uploaded:'اپ لوڈ ہو گئی', phone_verified:'فون نمبر کی تصدیق ہو گئی', profile_sample:'نمونہ تفصیلات بھریں',
     trust_h:'حقیقی اور قابلِ اعتماد اشتہارات', trust1:'فون نمبر سے رجسٹریشن', trust1p:'ہر اشتہار دہندہ تصدیقی کوڈ کے ساتھ فون نمبر سے رجسٹر ہوتا ہے', trust2:'سبز تصدیقی نشان', trust2p:'صرف ان اشتہار دہندگان کے لیے جنہوں نے تفصیلات اور لائسنس مکمل کیے',
@@ -258,3 +284,33 @@ const V2 = {
   }
 };
 ['ar','en','ur'].forEach(l => Object.assign(I18N[l], V2[l]));
+
+/* ---------- v3: global brands strip (names shown as text; drop a logo file in assets/img/brands/<id>.png to show it) ---------- */
+const BRANDS = [
+  {id:'caterpillar', n:'Caterpillar', q:'CAT'}, {id:'komatsu', n:'Komatsu', q:'Komatsu'}, {id:'volvo', n:'Volvo CE', q:'Volvo'},
+  {id:'liebherr', n:'Liebherr', q:'Liebherr'}, {id:'hitachi', n:'Hitachi', q:'Hitachi'}, {id:'jcb', n:'JCB', q:'JCB'},
+  {id:'xcmg', n:'XCMG', q:'XCMG'}, {id:'sany', n:'SANY', q:'SANY'}, {id:'hyundai', n:'Hyundai CE', q:'Hyundai'},
+  {id:'develon', n:'Develon', q:'Develon'}, {id:'tadano', n:'Tadano', q:'Tadano'}, {id:'bomag', n:'BOMAG', q:'BOMAG'},
+  {id:'dynapac', n:'Dynapac', q:'Dynapac'}, {id:'putzmeister', n:'Putzmeister', q:'Putzmeister'}, {id:'perkins', n:'Perkins', q:'Perkins'},
+  {id:'mercedes', n:'Mercedes-Benz Trucks', q:'Mercedes'}, {id:'yamaha', n:'Yamaha Marine', q:'Yamaha'}, {id:'damen', n:'Damen', q:'Damen'}
+];
+
+/* ---------- v3 texts ---------- */
+const V3 = {
+  ar:{ nav_rent:'تأجير معدات', nav_sale:'بيع معدات', all_sections:'كل الأقسام', menu_t:'القائمة', brands_h:'شركات عالمية', back:'رجوع',
+    browse_cat_h:'تصفّح المعدات حسب الفئة', n_ads:'{n} إعلان', chat:'دردشة', all_cats:'كل الفئات',
+    f_popular:'الأقسام الشائعة', f_emirates:'تصفّح حسب الإمارة', f_company:'الشركة', f_support:'الدعم', f_social:'تابعنا', f_app:'حمّل التطبيق قريباً',
+    contact_us:'اتصل بنا', advertise:'أعلن معنا', help_center:'مركز المساعدة', careers:'الوظائف', safety_tips:'نصائح الأمان', in_city:'في {c}',
+    unverified_note:'أكمل بيانات ملفك لتظهر علامة ✓ الخضراء بجانب اسمك.', pd_marine_leisure:'جت سكي، قوارب، يخوت، كاياك…', pd_marine_port:'رافعات موانئ، بارجات، قاطرات، حفارات تجريف…', pd_sandgravel:'رمل، حصى، ركام، رمل ردم…' },
+  en:{ nav_rent:'Equipment rental', nav_sale:'Equipment sale', all_sections:'All sections', menu_t:'Menu', brands_h:'Global brands', back:'Back',
+    browse_cat_h:'Browse equipment by category', n_ads:'{n} ads', chat:'Chat', all_cats:'All categories',
+    f_popular:'Popular sections', f_emirates:'Browse by emirate', f_company:'Company', f_support:'Support', f_social:'Follow us', f_app:'App coming soon',
+    contact_us:'Contact us', advertise:'Advertise with us', help_center:'Help center', careers:'Careers', safety_tips:'Safety tips', in_city:'in {c}',
+    unverified_note:'Complete your profile details to show the green ✓ next to your name.', pd_marine_leisure:'Jet skis, boats, yachts, kayaks…', pd_marine_port:'Harbour cranes, barges, tugs, dredgers…', pd_sandgravel:'Sand, gravel, aggregates, backfill…' },
+  ur:{ nav_rent:'آلات کرائے پر', nav_sale:'آلات برائے فروخت', all_sections:'تمام حصے', menu_t:'مینو', brands_h:'عالمی برانڈز', back:'واپس',
+    browse_cat_h:'زمرہ کے مطابق آلات دیکھیں', n_ads:'{n} اشتہارات', chat:'چیٹ', all_cats:'تمام زمرے',
+    f_popular:'مقبول حصے', f_emirates:'امارت کے مطابق دیکھیں', f_company:'کمپنی', f_support:'مدد', f_social:'ہمیں فالو کریں', f_app:'ایپ جلد آ رہی ہے',
+    contact_us:'رابطہ کریں', advertise:'ہمارے ساتھ اشتہار دیں', help_center:'مدد مرکز', careers:'ملازمتیں', safety_tips:'حفاظتی مشورے', in_city:'{c} میں',
+    unverified_note:'اپنے نام کے ساتھ سبز ✓ دکھانے کے لیے پروفائل کی تفصیلات مکمل کریں۔', pd_marine_leisure:'جیٹ اسکی، کشتیاں، یاٹ، کایاک…', pd_marine_port:'ہاربر کرینیں، بارجز، ٹگ، ڈریجرز…', pd_sandgravel:'ریت، بجری، روڑی، بھرائی کی ریت…' }
+};
+['ar','en','ur'].forEach(l => Object.assign(I18N[l], V3[l]));

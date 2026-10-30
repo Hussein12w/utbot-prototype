@@ -136,7 +136,7 @@ function contactModal(sid, iid, svc){
   const s = co(sid), it = iid ? byId(LISTINGS, iid) : svc ? byId(SERVICES, svc) : null;
   const mini = it ? `<div class="m-item"><div class="m-art">${ART(artOf(it), vOf(it.id))}${it.sec ? photo(it.id) : pic('services', it.id)}</div><div><b>${esc(title(it))}</b>${it.sec ? priceOf(it) : priceHTML(it.price, it.unit)}</div></div>` : '';
   openModal(`<h2>${svc ? t('request_service') : t('contact_adv')}</h2>${mini}
-    <a class="co-row" href="#/u/${s.id}" data-act="mclose-link">${avatar(s)}<div><b>${advName(s)}</b><small>${s.verified?t('verified_acc'):t('not_verified')} · ${esc(kindLabel(s))}</small></div></a>
+    <a class="co-row" href="#/u/${s.id}" data-act="mclose-link">${avatar(s)}<div><b>${advName(s)}</b><small>${esc(kindLabel(s))}</small></div></a>
     <div class="phone-row"><span class="ltr" id="mPhone">+971 5• ••• ••••</span><button class="btn btn-sm btn-dark" data-act="reveal-m" data-seller="${sid}">${ic('eye')} ${t('show_phone')}</button></div>
     <div class="two"><button class="btn btn-line" data-act="call">${ic('phone')} ${t('call')}</button><button class="btn btn-wa" data-act="wa">${ic('wa')} ${t('whatsapp')}</button></div>
     <form data-form="msg" class="m-form"><div class="two"><label class="fld"><span>${t('your_name')}</span><input value="${S.user ? esc(S.user.name) : ''}"></label><label class="fld"><span>${t('your_phone')}</span><input class="ltr-in" value="${S.user && S.user.phone ? '+971 ' + esc(S.user.phone) : ''}" placeholder="+971 5x xxx xxxx"></label></div>

@@ -31,7 +31,7 @@ function priceOf(it){
 }
 const pic = (dir, name) => `<img class="ph" src="assets/img/${dir}/${name}.jpg" alt="" loading="lazy" onload="this.classList.add('ok')" onerror="this.remove()">`;
 const photo = id => pic('listings', id);
-const catLabel = it => (it.sec === 'heavy' || it.sec === 'materials') && it.cat ? L(cat(it.cat)) : L(sec(it.sec));
+const catLabel = it => ['heavy','materials','sandgravel'].includes(it.sec) && it.cat ? L(cat(it.cat)) : L(sec(it.sec));
 
 const P = {
   search:'<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',
@@ -83,11 +83,15 @@ const P = {
   pipe:'<path d="M2 9h9a3 3 0 0 1 3 3v10M2 5v8M10 22h8"/><path d="M14 13h8v-4h-8"/>',
   camera:'<path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/>',
   lock:'<rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
+  boat:'<path d="M2 18c2 1.5 4 1.5 6 0s4-1.5 6 0 4 1.5 6 0M4 15l-1-4h18l-2 4M7 11V6h7l3 5M10 6V3"/>',
+  layers:'<path d="m12 2 10 5-10 5L2 7z"/><path d="m2 12 10 5 10-5M2 17l10 5 10-5"/>',
+  arrow:'<path d="M5 12h14M13 6l6 6-6 6"/>',
+  mail:'<rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 6 10 7 10-7"/>',
   doc:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h5"/>'
 };
 const ic = (n, c='') => `<svg class="ic ${c}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${P[n]||''}</svg>`;
 const logoMark = () => `<svg viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="10" fill="#F7B500"/><path d="M8 29h24l-3.5 5h-17z" fill="#1E1F22"/><path d="M13 29V18l8.5-7 7.5 6-3.6 4.4-4-3.2-2.6 2.1V29" fill="none" stroke="#1E1F22" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round"/></svg>`;
-const logo = () => `<a href="#/" class="logo" aria-label="Bulldozer"><span class="logo-mark">${logoMark()}</span><span class="logo-word">Bull<b>dozer</b></span></a>`;
+const logo = (cls='') => `<a href="#/" class="logo ${cls}" aria-label="Bulldozer"><span class="logo-img"><img src="assets/img/logo.jpg" alt=""></span><span class="logo-words"><b lang="ar">بلدوزر</b><b lang="en">Bulldozer</b></span></a>`;
 
 /* ---------------- Shared components ---------------- */
 const vbadge = a => a && a.verified ? `<span class="vbadge" title="${t('verified_badge')}">${ic('check')}</span>` : '';
@@ -96,25 +100,45 @@ const avatar = (a, cls='') => `<div class="co-logo ${cls}" style="--c:${a.color|
 const kindLabel = a => a.kind === 'company' && a.ctype ? `${t('k_company')} · ${L(ctypeOf(a.ctype))}` : t('k_' + (a.kind || 'individual'));
 const urgentB = () => `<span class="b b-r">${ic('bolt')} ${t('urgent')}</span>`;
 
+function attrs(it){
+  const out = [];
+  if (it.year) out.push(`${ic('cal','sm')} ${it.year}`);
+  if (it.hours) out.push(`${ic('gauge','sm')} ${fmt(it.hours)} ${t('hrs')}`);
+  else if (it.km) out.push(`${ic('gauge','sm')} ${fmt(it.km)} km`);
+  if (it.qty) out.push(`${ic('box','sm')} ${esc(L(it.qty))}`);
+  if (it.swap) out.push(`${ic('swap','sm')} ${esc(L(it.swap))}`);
+  out.push(`${ic('tag','sm')} ${t(it.deal)}`);
+  return out.slice(0, 3).map(x => `<span>${x}</span>`).join('');
+}
+const badgesOf = it => `${it.urgent?urgentB():''}${it.featured&&!it.urgent?`<span class="b b-y">${t('featured_b')}</span>`:''}${it.isNew?`<span class="b b-g">${t('new_b')}</span>`:''}`;
+/* Grid card (Dubizzle-like): photo, price first, title, attribute line, location + time */
 function card(it, opts={}){
-  const fav = S.favs.has(it.id), a = advOf(it);
-  let meta = `<span>${ic('pin')} ${L(city(it.city))}</span>`;
-  if (it.deal === 'supply' && it.qty) meta += `<span>${ic('box')} ${esc(L(it.qty))}</span>`;
-  else if (it.year) meta += `<span>${ic('cal')} ${it.year}</span>`;
+  const fav = S.favs.has(it.id);
   const tag = opts.static ? 'div' : 'a';
-  return `<${tag} class="card${it.urgent?' is-urgent':''}"${opts.static?'':` href="#/l/${it.id}"`}>
+  return `<${tag} class="card dz${it.urgent?' is-urgent':''}"${opts.static?'':` href="#/l/${it.id}"`}>
     <div class="media">${opts.media || (ART(artOf(it), vOf(it.id)) + photo(it.id))}
-      <div class="badges">${it.urgent?urgentB():''}${it.featured&&!it.urgent?`<span class="b b-y">${t('featured_b')}</span>`:''}${it.isNew?`<span class="b b-g">${t('new_b')}</span>`:''}</div>
-      ${opts.static?'':`<button class="fav${fav?' on':''}" data-fav="${it.id}" aria-label="${t('add_fav')}">${ic('heart')}</button>`}
-      <span class="deal deal-${it.deal}">${t(it.deal)}</span></div>
-    <div class="cbody"><div class="ctop"><span class="ccat">${esc(catLabel(it))}</span>${it.brand && it.brand!=='—' ? `<span class="cmodel">${esc(it.brand)} ${esc(it.model||'')}</span>` : ''}</div>
+      <div class="badges">${badgesOf(it)}</div>
+      ${opts.static?'':`<button class="fav${fav?' on':''}" data-fav="${it.id}" aria-label="${t('add_fav')}">${ic('heart')}</button>`}</div>
+    <div class="cbody"><div class="cprice">${priceOf(it)}</div>
       <h3>${esc(title(it))}</h3>
-      <div class="cmeta">${meta}</div>
-      ${a.id ? `<div class="cadv">${ic('user','sm')} ${advName(a)}</div>` : ''}
-      <div class="cfoot">${priceOf(it)}<span class="ago">${ago(it.days||0)}</span></div></div></${tag}>`;
+      <div class="cattrs">${attrs(it)}</div>
+      <div class="cloc"><span>${ic('pin','sm')} ${L(city(it.city))}${it.area?` · ${esc(L(it.area))}`:''}</span><span class="ago">${ago(it.days||0)}</span></div></div></${tag}>`;
+}
+/* List card (Dubizzle results view): photo on the side, details, Call / WhatsApp / Chat */
+function listCard(it){
+  const fav = S.favs.has(it.id), a = advOf(it);
+  return `<article class="lcard${it.urgent?' is-urgent':''}"><a class="stretch" href="#/l/${it.id}" aria-label="${esc(title(it))}"></a>
+    <div class="media">${ART(artOf(it), vOf(it.id))}${photo(it.id)}<div class="badges">${badgesOf(it)}</div></div>
+    <div class="lbody"><div class="ltop"><div class="cprice">${priceOf(it)}</div><button class="fav${fav?' on':''}" data-fav="${it.id}" aria-label="${t('add_fav')}">${ic('heart')}</button></div>
+      <span class="lcat">${esc(catLabel(it))}${it.brand && it.brand!=='—' ? ` · <span class="ltr">${esc(it.brand)} ${esc(it.model||'')}</span>` : ''}</span>
+      <h3>${esc(title(it))}</h3>
+      <div class="cattrs">${attrs(it)}</div>
+      <p class="ldesc">${esc(desc(it))}</p>
+      <div class="lfoot"><span class="cloc">${ic('pin','sm')} ${L(city(it.city))}${it.area?` · ${esc(L(it.area))}`:''} · ${ago(it.days||0)}</span>
+        <div class="lacts"><button class="btn btn-sm btn-line" data-act="call">${ic('phone')} ${t('call')}</button><button class="btn btn-sm btn-wa" data-act="wa">${ic('wa')} ${t('whatsapp')}</button><button class="btn btn-sm btn-dark" data-act="contact" data-seller="${a.id}" data-item="${it.id}">${ic('chat')} ${t('chat')}</button></div></div></div></article>`;
 }
 const secHead = (h, link, linkTxt) => `<div class="sec-h"><h2>${h}</h2>${link?`<a href="${link}" class="more">${linkTxt||t('view_all')} ${ic('chev','flip')}</a>`:''}</div>`;
-const catTile = c => `<a class="cat-tile" href="#/c/${c.id}"><div class="ct-art">${ART(c.art,0,true)}${pic('categories', c.id)}</div><span>${L(c)}</span></a>`;
+const catTile = (c, deal) => `<a class="cat-tile" href="#/c/${c.id}${deal?'?deal='+deal:''}"><div class="ct-art">${ART(c.art,0,true)}${pic('categories', c.id)}</div><span>${L(c)}</span></a>`;
 const secCount = id => id === 'opp' ? PROJECTS.length : LISTINGS.filter(l => l.sec === id).length;
 const secTile = s => `<a class="sec-tile" href="#/s/${s.id}"><span class="st-ic">${ic(s.icon)}</span><b>${L(s)}</b><small>${t('ads_count').replace('{n}', secCount(s.id))}</small></a>`;
 function projCard(p){
@@ -134,9 +158,9 @@ function servCard(s){
 function advCard(a){
   const n = LISTINGS.filter(l => l.seller === a.id).length + PROJECTS.filter(p => p.owner === a.id).length;
   return `<a class="co-card" href="#/u/${a.id}">${avatar(a)}<div class="co-info"><h3>${advName(a)}</h3>
-    <p>${esc(kindLabel(a))} · ${L(city(a.city))}</p><div class="co-meta">${a.verified?`<span class="ok-t">${t('verified_acc')}</span>`:`<span class="no-t">${t('not_verified')}</span>`}<span>${t('ads_count').replace('{n}', n)}</span></div></div></a>`;
+    <p>${esc(kindLabel(a))} · ${L(city(a.city))}</p><div class="co-meta"><span>${t('ads_count').replace('{n}', n)}</span></div></div></a>`;
 }
-const crumbs = arr => `<nav class="crumbs"><a href="#/">${t('home')}</a>${arr.map(a => `${ic('chev','flip sm')}${a[1]?`<a href="${a[1]}">${esc(a[0])}</a>`:`<span>${esc(a[0])}</span>`}`).join('')}</nav>`;
+const crumbs = arr => `<nav class="crumbs"><button class="back-btn" data-act="back" aria-label="${t('back')}">${ic('arrow','flipb')}<span>${t('back')}</span></button><a href="#/">${t('home')}</a>${arr.map(a => `${ic('chev','flip sm')}${a[1]?`<a href="${a[1]}">${esc(a[0])}</a>`:`<span>${esc(a[0])}</span>`}`).join('')}</nav>`;
 const UAE_PATH = `<path d="M14 150 L60 148 L100 156 L140 150 L178 136 L214 116 L240 100 L262 82 L284 58 L300 36 L316 26 L326 44 L332 70 L346 96 L352 124 L342 140 L320 150 L304 170 L306 200 L284 214 L240 228 L190 244 L120 250 L60 248 L14 236 Z" fill="#f3ead6" stroke="#d6c39b" stroke-width="2"/>`;
 const PIN = `<path d="M0 0 C-10 -14 -12 -18 -12 -24 A12 12 0 0 1 12 -24 C12 -18 10 -14 0 0Z" fill="#1E1F22"/><circle cy="-24" r="5" fill="#F7B500"/>`;
 function miniMap(cid){
@@ -147,64 +171,66 @@ function miniMap(cid){
 }
 
 /* ---------------- Shell ---------------- */
-const NAV = [['', 'home', '#/'], ['s:heavy', 'sec_heavy', '#/s/heavy'], ['s:wanted', 'sec_wanted', '#/s/wanted'], ['s:opp', 'sec_opp', '#/s/opp'],
-  ['s:exchange', 'sec_exchange', '#/s/exchange'], ['s:generators', 'sec_generators', '#/s/generators'], ['s:cabins', 'sec_cabins', '#/s/cabins'],
-  ['s:contractor', 'sec_contractor', '#/s/contractor'], ['s:materials', 'sec_materials', '#/s/materials'], ['companies', 'companies', '#/companies'], ['s:other', 'sec_other', '#/s/other']];
+const NAV = [['', 'home', '#/'], ['s:marine_leisure', 'sec_marine_leisure', '#/s/marine_leisure'], ['s:marine_port', 'sec_marine_port', '#/s/marine_port'],
+  ['rent', 'nav_rent', '#/browse/rent'], ['sale', 'nav_sale', '#/browse/sale'], ['s:exchange', 'sec_exchange', '#/s/exchange'],
+  ['s:materials', 'sec_materials', '#/s/materials'], ['s:sandgravel', 'sec_sandgravel', '#/s/sandgravel'], ['s:opp', 'sec_opp', '#/s/opp'], ['s:other', 'sec_other', '#/s/other']];
 const navLabel = n => n[1].startsWith('sec_') ? L(sec(n[1].slice(4))) : t(n[1]);
-const langBtns = () => LANGS.map(l => `<button data-act="setlang" data-l="${l}" class="${S.lang===l?'on':''}" lang="${l}">${I18N[l].lang_name}${S.lang===l?ic('check','sm'):''}</button>`).join('');
+const navIcon = n => n[0] === '' ? 'home' : n[0] === 'rent' ? 'clock' : n[0] === 'sale' ? 'tag' : sec(n[0].slice(2)).icon;
+const langBtns = () => LANGS.map(l => `<button data-act="setlang" data-l="${l}" class="${S.lang===l?'on':''}" lang="${l}">${I18N[l].lang_name}</button>`).join('');
+const brandChip = b => `<a class="brand-chip" href="#/search/${encodeURIComponent(b.q)}"><img src="assets/img/brands/${b.id}.png" alt="" onload="this.parentNode.classList.add('has-logo')" onerror="this.remove()"><span>${b.n}</span></a>`;
 function shell(){
   const cityOpts = `<option value="">${t('all_uae')}</option>` + CITIES.map(c => `<option value="${c.id}"${S.city===c.id?' selected':''}>${L(c)}</option>`).join('');
-  const notif = `<div class="pop notif-pop" id="notifPop" hidden><div class="pop-h"><b>${t('notifications')}</b><button class="link" data-act="notif-read">${t('mark_read')}</button></div>
-    ${NOTIFS.map(n => `<div class="notif${S.notifRead?'':' unread'}"><span class="n-ic">${ic('bell')}</span><div><p>${esc(L(n))}</p><small>${t('ago_h').replace('{n}', n.h)}</small></div></div>`).join('')}</div>`;
   const u = S.user;
   const userBox = u
     ? `<div class="pop-wrap"><button class="avatar-btn" data-act="umenu"><span class="avatar">${esc(u.name.trim().charAt(0))}</span><span class="only-d">${esc(u.name.split(' ')[0])}</span>${vbadge(u)}</button>
-        <div class="pop user-pop" id="userPop" hidden><a href="#/account/profile">${ic('user')} ${t('my_profile')}${u.verified?'':`<i class="dot-warn"></i>`}</a><a href="#/account/ads">${ic('box')} ${t('my_ads')}</a><a href="#/account/favs">${ic('heart')} ${t('favorites')}</a><a href="#/account/msgs">${ic('chat')} ${t('messages')}</a><button data-act="logout">${ic('logout')} ${t('logout')}</button></div></div>`
-    : `<a href="#/login" class="btn btn-dark only-d">${ic('phone')} ${t('login')}</a>`;
-  const navLinks = cls => NAV.map(n => `<a href="${n[2]}" data-nav="${n[0]}"${cls}>${n[0]===''?ic('home'):''}<span>${navLabel(n)}</span></a>`).join('');
+        <div class="pop user-pop" id="userPop" hidden><a href="#/account/profile">${ic('user')} ${t('my_profile')}${u.verified?'':`<i class="dot-warn"></i>`}</a><a href="#/account/ads">${ic('box')} ${t('my_ads')}</a><a href="#/account/favs">${ic('heart')} ${t('favorites')}</a><a href="#/account/msgs">${ic('chat')} ${t('messages')}</a><a href="#/post">${ic('plus')} ${t('post_ad')}</a><button data-act="logout">${ic('logout')} ${t('logout')}</button></div></div>`
+    : `<a href="#/login" class="btn btn-dark login-btn">${ic('user')}<span>${t('login')}</span></a>`;
+  const drawerLink = (href, icon, label, nav) => `<a href="${href}" data-act="drawer-link"${nav?` data-nav="${nav}"`:''}>${ic(icon)}<span>${label}</span></a>`;
   return `
-  <div class="demo-strip" id="demoStrip"${S.hideStrip?' hidden':''}><div class="wrap">${ic('info')}<span>${t('demo_strip')}</span><button data-act="hide-strip" aria-label="close">${ic('close')}</button></div></div>
+  <div class="brands" aria-label="${t('brands_h')}"><div class="wrap br-in"><span class="br-l">${ic('star')} ${t('brands_h')}</span>
+    <div class="br-track"><div class="br-row">${BRANDS.map(brandChip).join('')}${BRANDS.map(brandChip).join('')}</div></div></div></div>
   <header class="hdr">
     <div class="wrap hdr-top">
-      <button class="icon-btn only-m" data-act="drawer" aria-label="menu">${ic('menu')}</button>
-      <div class="brand">${logo()}<div class="brand-txt"><strong>${t('brand_tag')}</strong><span>${t('brand_sub')}</span></div></div>
+      ${logo()}
       <form class="search" data-form="search" role="search">
         <select name="scope" aria-label="scope"><option value="">${t('all')}</option><option value="ads"${S.scope==='ads'?' selected':''}>${t('sc_ads')}</option><option value="accounts"${S.scope==='accounts'?' selected':''}>${t('sc_accounts')}</option></select>
         <input name="q" type="search" placeholder="${t('search_ph')}" value="${esc(S.q)}" aria-label="search">
         <button type="submit" aria-label="search">${ic('search')}</button>
       </form>
-      <div class="hdr-actions">
-        <label class="city-sel">${ic('pin')}<select data-act="city" aria-label="${t('city')}">${cityOpts}</select></label>
-        <div class="pop-wrap"><button class="hbtn" data-act="langmenu" aria-label="language">${ic('globe')}<span>${t('lang_name')}</span></button><div class="pop lang-pop" id="langPop" hidden>${langBtns()}</div></div>
-        <div class="pop-wrap"><button class="icon-btn bell" data-act="notif" aria-label="${t('notifications')}">${ic('bell')}${S.notifRead?'':'<i class="dot">3</i>'}</button>${notif}</div>
-        ${userBox}
-        <a href="#/post?mode=request" class="btn btn-line req-btn only-d">${ic('search')} ${t('post_request')}</a>
-        <a href="#/post" class="btn btn-y post-btn">${ic('plus')}<span>${t('post_ad')}</span></a>
-      </div>
+      <div class="hdr-actions"><div class="lang-seg" role="group" aria-label="language">${langBtns()}</div>${userBox}</div>
     </div>
-    <nav class="mainnav"><div class="wrap navrow">${navLinks('')}</div></nav>
+    <nav class="mainnav"><div class="wrap navrow"><button class="menu-btn" data-act="drawer" aria-label="${t('menu_t')}">${ic('menu')}<span>${t('all_sections')}</span></button>
+      ${NAV.map(n => `<a href="${n[2]}" data-nav="${n[0]}"><span>${navLabel(n)}</span></a>`).join('')}</div></nav>
   </header>
   <main id="view"></main>
-  <footer class="ftr"><div class="wrap ftr-grid">
-    <div class="ftr-about">${logo()}<p>${t('f_about')}</p></div>
-    <div><h4>${t('f_links')}</h4>${['heavy','wanted','opp','exchange','contractor'].map(id => `<a href="#/s/${id}">${L(sec(id))}</a>`).join('')}<a href="#/companies">${t('dir_h')}</a></div>
-    <div><h4>${t('f_help')}</h4><a href="#" data-act="demo">${t('about')}</a><a href="#" data-act="boost">${t('pricing')}</a><a href="#" data-act="demo">${t('faq')}</a><a href="#" data-act="demo">${t('terms')}</a><a href="#" data-act="demo">${t('privacy')}</a></div>
-    <div><h4>${t('f_contact')}</h4><p class="ltr">+971 4 000 0000</p><p class="ltr">hello@bulldozer.ae</p><p>${L(city('dxb'))} — ${t('x_country')}</p></div>
-  </div><div class="wrap ftr-bot"><span>© 2026 Bulldozer — ${t('rights')}</span><span class="muted">${t('sample')}</span></div></footer>
+  <footer class="ftr"><div class="wrap ftr-cols">
+    <div><h4>${t('f_popular')}</h4>${NAV.slice(1).map(n => `<a href="${n[2]}">${navLabel(n)}</a>`).join('')}<a href="#/companies">${t('dir_h')}</a></div>
+    <div><h4>${t('f_emirates')}</h4>${CITIES.map(c => `<a href="#/all?city=${c.id}">${L(c)}</a>`).join('')}</div>
+    <div><h4>${t('f_company')}</h4><a href="#" data-act="demo">${t('about')}</a><a href="#" data-act="demo">${t('careers')}</a><a href="#" data-act="demo">${t('contact_us')}</a><a href="#" data-act="boost">${t('advertise')}</a><a href="#" data-act="demo">${t('terms')}</a><a href="#" data-act="demo">${t('privacy')}</a></div>
+    <div><h4>${t('f_support')}</h4><a href="#" data-act="demo">${t('help_center')}</a><a href="#" data-act="demo">${t('safety_tips')}</a><a href="#" data-act="demo">${t('faq')}</a><a href="#" data-act="boost">${t('pricing')}</a>
+      <p class="ltr">${ic('phone','sm')} +971 4 000 0000</p><p class="ltr">${ic('mail','sm')} hello@bulldozer.ae</p></div>
+    <div><h4>${t('f_social')}</h4><div class="soc">${['Instagram','X','Facebook','YouTube','LinkedIn'].map(n => `<a href="#" data-act="demo" class="soc-i">${n}</a>`).join('')}</div>
+      <h4 class="mt">${t('f_app')}</h4><div class="apps"><a href="#" data-act="demo" class="app-b">${ic('phone')}<span><small>${t('soon')}</small><b>iOS</b></span></a><a href="#" data-act="demo" class="app-b">${ic('phone')}<span><small>${t('soon')}</small><b>Android</b></span></a></div></div>
+  </div>
+  <div class="ftr-bot"><div class="wrap ftr-bot-in">${logo('sm')}<span>© 2026 Bulldozer — ${t('rights')}</span><span class="demo-note-f">${ic('info','sm')} ${t('demo_strip')}</span></div></div></footer>
   <nav class="tabbar">
     <a href="#/" data-tab="">${ic('home')}<span>${t('home')}</span></a>
-    <a href="#/s/heavy" data-tab="s">${ic('grid')}<span>${L(sec('heavy'))}</span></a>
+    <a href="#" data-act="drawer" data-tab="menu">${ic('menu')}<span>${t('all_sections')}</span></a>
     <a href="#/post" class="tab-post" data-tab="post"><b>${ic('plus')}</b><span>${t('post_ad')}</span></a>
     <a href="#/companies" data-tab="companies">${ic('building')}<span>${t('dir_h')}</span></a>
     <a href="${u?'#/account/profile':'#/login'}" data-tab="account">${ic('user')}<span>${u?t('my_account'):t('login')}</span></a>
   </nav>
   <div class="drawer" id="drawer" hidden><div class="dr-bg" data-act="drawer"></div><aside class="dr-panel">
     <div class="dr-h">${logo()}<button class="icon-btn" data-act="drawer" aria-label="close">${ic('close')}</button></div>
-    ${NAV.map(n => `<a href="${n[2]}" data-act="drawer-link">${n[0]===''?ic('home'):ic(n[0]==='companies'?'building':sec(n[0].slice(2)).icon)}<span>${navLabel(n)}</span></a>`).join('')}
-    <hr><a href="#/post" data-act="drawer-link">${ic('plus')}<span>${t('post_ad')}</span></a>
-    <a href="#/post?mode=request" data-act="drawer-link">${ic('search')}<span>${t('post_request')}</span></a>
-    <a href="${u?'#/account/profile':'#/login'}" data-act="drawer-link">${ic('user')}<span>${u?t('my_account'):t('login')}</span></a>
-    <div class="dr-langs">${ic('globe')}${langBtns()}</div>
+    <div class="dr-langs">${langBtns()}</div>
+    <div class="dr-acts"><a href="#/post" class="btn btn-y" data-act="drawer-link">${ic('plus')} ${t('post_ad')}</a><a href="#/post?mode=request" class="btn btn-line" data-act="drawer-link">${ic('search')} ${t('post_request')}</a></div>
+    <h5>${t('menu_t')}</h5>
+    ${NAV.map(n => drawerLink(n[2], navIcon(n), navLabel(n))).join('')}
+    <h5>${t('all_sections')}</h5>
+    ${['heavy','wanted','generators','cabins','contractor'].map(id => drawerLink('#/s/'+id, sec(id).icon, L(sec(id)))).join('')}
+    ${drawerLink('#/companies', 'building', t('dir_h'))}${drawerLink('#/urgent', 'bolt', t('urgent_ads'))}${drawerLink('#/featured', 'star', t('featured'))}
+    <h5>${t('my_account')}</h5>
+    ${drawerLink(u?'#/account/profile':'#/login', 'user', u?t('my_account'):t('login'))}${drawerLink('#/fav', 'heart', t('favorites'))}
     <label class="city-sel dr-city">${ic('pin')}<select data-act="city">${cityOpts}</select></label>
   </aside></div>
   <div class="modal" id="modal" hidden></div>
@@ -219,12 +245,12 @@ function renderShell(){
 
 /* ---------------- Router ---------------- */
 let heroTimer = null;
-function navKey(p, parts){
+function navKey(p, parts, params){
   if (p === 's') return 's:' + parts[1];
-  if (p === 'c') return 's:' + (cat(parts[1]).g === 'materials' ? 'materials' : 'heavy');
-  if (p === 'l') { const it = byId(LISTINGS, parts[1]); return it ? 's:' + it.sec : ''; }
+  if (p === 'c') { const id = parts[1]; if (['sand','gravel'].includes(id)) return 's:sandgravel'; if (cat(id).g === 'materials') return 's:materials'; if (id === 'marine') return 's:marine_port'; return params.get('deal') || ''; }
+  if (p === 'l') { const it = byId(LISTINGS, parts[1]); if (!it) return ''; return it.sec === 'heavy' ? it.deal : 's:' + it.sec; }
   if (p === 'p') return 's:opp';
-  if (p === 'browse') return 's:heavy';
+  if (p === 'browse') return parts[1];
   if (p === 'companies') return 'companies';
   return p === '' ? '' : '-';
 }
@@ -236,13 +262,15 @@ function route(){
   const params = new URLSearchParams(qs || '');
   const alias = {equipment:['s','heavy'], materials:['s','materials'], projects:['s','opp'], co:['u', parts[1]]};
   if (alias[p]) { const a = alias[p]; parts.splice(0, 2, a[0], a[1]); p = a[0]; }
-  if (S.lastPath !== path) S.f = {deal:'', city:S.city, ymin:'', pmax:'', sort:'new', urg:false, ver:false, kind:''};
+  if (S.lastPath !== path) { S.f = {deal:'', city:S.city, ymin:'', pmax:'', sort:'new', urg:false, kind:'', cat:''}; S.depth = (S.depth || 0) + 1; }
+  if (params.get('deal')) S.f.deal = params.get('deal');
+  if (params.get('city')) S.f.city = params.get('city');
   clearInterval(heroTimer);
   let html;
   switch (p) {
     case '': html = vHome(); break;
     case 's': html = vSection(parts[1]); break;
-    case 'c': html = vCat(parts[1]); break;
+    case 'c': html = vCat(parts[1], params); break;
     case 'browse': html = vDeal(parts[1]); break;
     case 'featured': case 'all': case 'urgent': html = vList(p); break;
     case 'search': html = vSearch(parts[1] || ''); break;
@@ -258,10 +286,10 @@ function route(){
     default: html = vNF();
   }
   $('#view').innerHTML = html;
-  const nk = navKey(p, parts);
+  const nk = navKey(p, parts, params);
   $$('[data-nav]').forEach(a => a.classList.toggle('on', a.dataset.nav === nk));
   $$('[data-tab]').forEach(a => a.classList.toggle('on', a.dataset.tab === p || (p==='login' && a.dataset.tab==='account')));
-  const onNav = $('.navrow a.on'); if (onNav && onNav.scrollIntoView && S.lastPath !== path) { try { onNav.scrollIntoView({block:'nearest', inline:'center'}); } catch(e) {} }
+  const onNav = $('.navrow a.on'); $$('.dr-panel [data-nav]').forEach(x => x.classList.toggle('on', x.dataset.nav === nk)); if (onNav && onNav.scrollIntoView && S.lastPath !== path) { try { onNav.scrollIntoView({block:'nearest', inline:'center'}); } catch(e) {} }
   if (!S.keepScroll && S.lastPath !== path) window.scrollTo(0, 0);
   S.keepScroll = false; S.lastPath = path;
   if (p === '') heroTimer = setInterval(() => slide(1), 7000);
